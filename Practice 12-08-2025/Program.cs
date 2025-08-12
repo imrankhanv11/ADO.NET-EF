@@ -9,10 +9,13 @@ namespace Practice12
         {
             Practice obj = new Practice();
             CRUD crudobj = new CRUD();
+
+            // 1---> Basic
+            // 2---> CRUD with inputvalidation and dynamic changes
             Console.WriteLine("-------------------------");
             Console.WriteLine("---------- MENU ---------");
             Console.WriteLine("-------------------------");
-            Console.WriteLine("1.             TABLE     ");
+            Console.WriteLine("1.             C-TABLE   ");
             Console.WriteLine("2.             CRUD      ");
             Console.WriteLine("-------------------------");
             Console.WriteLine("Enter the Code to run :");

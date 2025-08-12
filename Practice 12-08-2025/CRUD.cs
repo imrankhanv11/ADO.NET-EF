@@ -10,6 +10,7 @@ namespace Practice12
     internal class CRUD
     {
         Operations oprObj = new Operations();
+
         public void crudmethod() {
             Console.WriteLine("-------------------------");
             Console.WriteLine("---------- CRUD ---------");
@@ -46,17 +47,19 @@ namespace Practice12
     class Operations
     {
 
+        InputValidation input = new InputValidation();
+
         string connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True";
         public void insertrecode()
         {
             Console.WriteLine("Enter the name to insert : ");
-            string insertName = Console.ReadLine();
+            string insertName = input.StringCheck(Console.ReadLine());
 
             Console.WriteLine("Enter the Age to insert : ");
-            int insertAge = Convert.ToInt32(Console.ReadLine());
+            int insertAge = input.IntCheck(Console.ReadLine());
 
             Console.WriteLine("Enter The Department to insert : ");
-            string insertDepartment = Console.ReadLine();
+            string insertDepartment = input.StringCheck(Console.ReadLine());
 
 
             using (SqlConnection insertcon = new SqlConnection(connectionString))
@@ -84,12 +87,13 @@ namespace Practice12
                 Console.WriteLine($"Inserted Rows : {result}");
 
             }
+            readrecode();
         }
 
         public void deleterecode()
         {
             Console.Write("Enter the id to delete : ");
-            int deleteId = Convert.ToInt32(Console.ReadLine());
+            int deleteId = input.IntCheck(Console.ReadLine());
 
             using(SqlConnection deleteconnect = new SqlConnection(connectionString))
             {
@@ -103,15 +107,16 @@ namespace Practice12
                 int result = delcmd.ExecuteNonQuery();
                 Console.WriteLine($"Deleted Rows : {result}");
             }
+            readrecode();
 
         }
 
         public void updaterecode()
         {
             Console.Write("Enter the id to upadte : ");
-            int updateId = Convert.ToInt32(Console.ReadLine());
+            int updateId = input.IntCheck(Console.ReadLine());
             Console.WriteLine("Enter the age to Update : ");
-            int upage = Convert.ToInt32(Console.ReadLine());
+            int upage = input.IntCheck(Console.ReadLine());
 
             //Console.WriteLine("------------------------------");
             //Console.WriteLine("1.             NAME           ");
@@ -133,6 +138,7 @@ namespace Practice12
                 int result = upCmd.ExecuteNonQuery();
                 Console.WriteLine($"Affter rows : ${result}");
             }
+            readrecode();
         }
 
         public void readrecode()
@@ -145,10 +151,11 @@ namespace Practice12
                 readCmd.CommandText = readquery;
 
                 SqlDataReader reader = readCmd.ExecuteReader();
-
+                Console.WriteLine();
                 while(reader.Read())
                 {
-                    Console.WriteLine(reader[1]+" " + reader["Age"]+" " + reader[3]);
+                    Console.WriteLine($"ID : {reader[0]}, Name : {reader["Name"]}, Age : {reader[2]}, Department : {reader[3]}");
+                    Console.WriteLine();
                 }
             }
         }
