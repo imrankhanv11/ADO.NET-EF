@@ -13,34 +13,49 @@ namespace Practice12
             CRUD crudobj = new ();
             // for SP
             Sp sp = new Sp();
+            // for object
+            EmployeeObj emp = new EmployeeObj();
 
-            // 1---> Basic
-            // 2---> CRUD with inputvalidation and dynamic changes (With input Parameter)
-            // 3---> SP with input and output parameters
-            Console.WriteLine("-------------------------");
-            Console.WriteLine("---------- MENU ---------");
-            Console.WriteLine("-------------------------");
-            Console.WriteLine("1.             C-TABLE   ");
-            Console.WriteLine("2.             CRUD      ");
-            Console.WriteLine("3.             SP        ");
-            Console.WriteLine("-------------------------");
-            Console.WriteLine("Enter the Code to run :");
-            int code = Convert.ToInt32(Console.ReadLine());
 
-            switch(code)
+            while (true)
             {
-                case 1:
-                    obj.Run();
-                    break;
-                case 2:
-                    crudobj.crudmethod();
-                    break;
-                case 3:
-                    sp.showSPmethods();
-                    break;
-                default:
-                    Console.WriteLine("Try again");
-                    break;
+
+                // 1---> Basic
+                // 2---> CRUD with inputvalidation and dynamic changes (With input Parameter)
+                // 3---> SP with input and output parameters
+                Console.WriteLine("-------------------------");
+                Console.WriteLine("---------- MENU ---------");
+                Console.WriteLine("-------------------------");
+                Console.WriteLine("1.             C-TABLE   ");
+                Console.WriteLine("2.             CRUD      ");
+                Console.WriteLine("3.             SP        ");
+                Console.WriteLine("4.             Object    ");
+                Console.WriteLine("5.             Exit      ");
+                Console.WriteLine("-------------------------");
+
+                Console.WriteLine("Enter the Code to run :");
+                int code = Convert.ToInt32(Console.ReadLine());
+
+                switch (code)
+                {
+                    case 1:
+                        obj.Run();
+                        break;
+                    case 2:
+                        crudobj.crudmethod();
+                        break;
+                    case 3:
+                        sp.showSPmethods();
+                        break;
+                    case 4:
+                        emp.addEmployee();
+                        break;
+                     case 5:
+                        return;
+                    default:
+                        Console.WriteLine("Try again");
+                        break;
+                }
             }
 
         }

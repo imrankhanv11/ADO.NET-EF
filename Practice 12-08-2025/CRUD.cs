@@ -19,27 +19,35 @@ namespace Practice12
             Console.WriteLine("2.             UPDATE    ");
             Console.WriteLine("3.             READ      ");
             Console.WriteLine("4.             DELETE    ");
+            Console.WriteLine("5.             EXIT      ");
             Console.WriteLine("-------------------------");
-            Console.WriteLine("Enter the Code to do Operations : ");
-            int code = Convert.ToInt32(Console.ReadLine());
-
-            switch(code)
+            
+            while (true)
             {
-                case 1:
-                    oprObj.insertrecode();
-                    break;
-                case 2:
-                    oprObj.updaterecode();
-                    break;
-                case 3:
-                    oprObj.readrecode();
-                    break;
-                case 4:
-                    oprObj.deleterecode();
-                    break;
-                default:
-                    Console.WriteLine("Enter the Correct code");
-                    break;
+
+                Console.WriteLine("Enter the Code to do Operations : ");
+                int code = Convert.ToInt32(Console.ReadLine());
+
+                switch (code)
+                {
+                    case 1:
+                        oprObj.insertrecode();
+                        break;
+                    case 2:
+                        oprObj.updaterecode();
+                        break;
+                    case 3:
+                        oprObj.readrecode();
+                        break;
+                    case 4:
+                        oprObj.deleterecode();
+                        break;
+                    case 5:
+                        return;
+                    default:
+                        Console.WriteLine("Enter the Correct code");
+                        break;
+                }
             }
         }
     }

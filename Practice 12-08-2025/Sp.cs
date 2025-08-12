@@ -22,27 +22,35 @@ namespace Practice12
             Console.WriteLine("2.    SP with Output Prameter  ");
             Console.WriteLine("3.    SP with Output Rows(1)   ");
             Console.WriteLine("4.    SP with Output Rows(n)   ");
+            Console.WriteLine("5.    EXIT                     ");
             Console.WriteLine("-------------------------------");
-            Console.WriteLine("Enter the Code to run :");
-            int code = Convert.ToInt32(Console.ReadLine());
-
-            switch (code)
+            
+            while (true)
             {
-                case 1:
-                    InputPrameter();
-                    break;
-                case 2:
-                    OutputPrameter();
-                    break;
-                case 3:
-                    Outputrows1();
-                    break;
-                case 4:
-                    Outputrowsn();
-                    break;
-                default:
-                    Console.WriteLine("Try again");
-                    break;
+
+                Console.WriteLine("Enter the Code to run :");
+                int code = Convert.ToInt32(Console.ReadLine());
+
+                switch (code)
+                {
+                    case 1:
+                        InputPrameter();
+                        break;
+                    case 2:
+                        OutputPrameter();
+                        break;
+                    case 3:
+                        Outputrows1();
+                        break;
+                    case 4:
+                        Outputrowsn();
+                        break;
+                    case 5:
+                        return;
+                    default:
+                        Console.WriteLine("Try again");
+                        break;
+                }
             }
         }
 
