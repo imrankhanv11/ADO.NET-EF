@@ -54,7 +54,7 @@ namespace Practice12
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("Invalid input. Please enter a valid numeric salary:");
+                    Console.WriteLine("Invalid input. Please enter a valid numeric Age:");
                     input = Console.ReadLine();
                 }
                 catch (OverflowException)
