@@ -33,7 +33,7 @@ namespace Practice13
                         onevl.dataTablemethod();
                         break;
                     case 2:
-
+                        DataSetvalue.DataSetMethod();
                         break;
                     case 3:
                         Console.WriteLine("Thank You");

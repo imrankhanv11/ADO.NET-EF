@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -47,7 +48,7 @@ namespace Practice13
                         deleteandRemove();
                         break;
                     case 5:
-
+                        withDB();
                         break;
                     case 6:
                         Console.WriteLine("Thank You");
@@ -286,5 +287,69 @@ namespace Practice13
             }
             Console.WriteLine();
         }
+
+        string connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True";
+        public void withDB()
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sqlquery = "SELECT * FROM Employee";
+
+                    DataTable newTable = new DataTable();
+
+                    using (SqlCommand cmd = new SqlCommand(sqlquery, conn))
+                    {
+                        SqlDataAdapter ad = new SqlDataAdapter(cmd);
+
+                        SqlCommandBuilder builder = new SqlCommandBuilder(ad);
+
+                        ad.Fill(newTable);
+
+                        Console.WriteLine("After reading DB to table");
+                        foreach (DataRow row in newTable.Rows)
+                        {
+                            Console.WriteLine($"{row["ID"]} - {row["Name"]}");
+                        }
+                        Console.WriteLine();
+
+                        DataRow row1 = newTable.NewRow();
+                        row1["ID"] = 77;
+                        row1["Name"] = "Imran";
+                        row1["Age"] = 21;
+                        newTable.Rows.Add(row1);
+
+                        Console.WriteLine("After inserting new row to DataTable");
+                        foreach (DataRow row in newTable.Rows)
+                        {
+                            Console.WriteLine($"{row["ID"]} - {row["Name"]}");
+                        }
+                        Console.WriteLine();
+
+                        ad.Update(newTable);
+
+                        //cmd.CommandText = "SELECT * FROM Employee";
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            Console.WriteLine("After updating DB:");
+                            while (reader.Read())
+                            {
+                                Console.WriteLine(reader["ID"] + " " + reader["Name"]);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+
+
     }
 }
