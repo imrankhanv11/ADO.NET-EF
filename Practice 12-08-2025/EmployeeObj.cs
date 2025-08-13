@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Practice12
         int count = 1;
 
 
-        string connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True";
+        string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
         public void addEmployee()
         {

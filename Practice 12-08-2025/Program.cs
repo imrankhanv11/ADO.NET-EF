@@ -10,7 +10,7 @@ namespace Practice12
             //for basic
             Practice obj = new Practice();
             // for Crud
-            CRUD crudobj = new ();
+            CRUD crudobj = new CRUD ();
             // for SP
             Sp sp = new Sp();
             // for object

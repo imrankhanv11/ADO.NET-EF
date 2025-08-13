@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -6,7 +7,7 @@ namespace Practice12
 {
     internal class Practice
     {
-        string connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True";
+        string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
         [Obsolete]
         public void Run()

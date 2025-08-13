@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace Practice12
 {
@@ -57,7 +58,7 @@ namespace Practice12
 
         InputValidation input = new InputValidation();
 
-        string connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True";
+        string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         public void insertrecode()
         {
             Console.WriteLine("Enter the name to insert : ");

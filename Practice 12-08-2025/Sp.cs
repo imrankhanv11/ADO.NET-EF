@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,9 @@ namespace Practice12
 {
     internal class Sp
     {
-        InputValidation input = new();
+        InputValidation input = new InputValidation();
 
-        string connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True";
+        string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
         public void showSPmethods()
         {
