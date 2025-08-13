@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace Practice13
@@ -19,8 +20,11 @@ namespace Practice13
             Console.WriteLine("-----------------------------------");
             Console.WriteLine("--------------- Menu --------------");
             Console.WriteLine("1.                Insertdata       ");
-            Console.WriteLine("2.                WithDB           ");
-            Console.WriteLine("3.                Exit             ");
+            Console.WriteLine("2.                Copy & Clone     ");
+            Console.WriteLine("3.                Merge            ");
+            Console.WriteLine("4.                Delete & Remove  ");
+            Console.WriteLine("5.                With DB          ");
+            Console.WriteLine("6.                Exit             ");
             Console.WriteLine("-----------------------------------");
 
             while (true)
@@ -34,9 +38,18 @@ namespace Practice13
                         datatableinsert();
                         break;
                     case 2:
-
+                        CopyandClone();
                         break;
                     case 3:
+                        merger();
+                        break;
+                    case 4:
+                        deleteandRemove();
+                        break;
+                    case 5:
+
+                        break;
+                    case 6:
                         Console.WriteLine("Thank You");
                         return;
                     default:
@@ -131,7 +144,7 @@ namespace Practice13
             tbl.Rows.Add(newRow);
 
             // Print header
-            Console.WriteLine("ID\tName\tAge\tDepartment");
+            Console.WriteLine("ID\tName\t\tAge\tDepartment");
             Console.WriteLine("-----------------------------------------------");
 
             // Print rows
@@ -139,7 +152,139 @@ namespace Practice13
             {
                 Console.WriteLine($"{row["ID"],-5} {row["Name"],-15} {row["Age"],-5} {row["Department"],-10}");
             }
+            Console.WriteLine();
+        }
 
+        public void CopyandClone()
+        {
+            // for clone
+            DataTable clonetable = new DataTable();
+
+            // for copy table 
+            DataTable copytable = new DataTable();
+
+            clonetable = tbl.Clone();
+
+            copytable = tbl.Copy();
+
+            Console.WriteLine("This is clone table :");
+            foreach(DataColumn col in clonetable.Columns)
+            {
+                Console.WriteLine(col.ColumnName+" "+col.DataType);
+            }
+            Console.WriteLine();
+            Console.WriteLine("This is Copy table : ");
+            foreach(DataRow row in copytable.Rows)
+            {
+                Console.WriteLine($"{row["ID"],-5} {row["Name"],-15} {row["Age"],-5} {row["Department"],-10}");
+            }
+            Console.WriteLine();
+
+            // copy rows form one table to another
+            Console.WriteLine("Import from another table rows : ");
+
+            clonetable.ImportRow(copytable.Rows[0]);
+            clonetable.ImportRow(copytable.Rows[1]);
+            foreach (DataRow row in clonetable.Rows)
+            {
+                Console.WriteLine($"{row["ID"],-5} {row["Name"],-15} {row["Age"],-5} {row["Department"],-10}");
+            }
+        }
+
+        public void merger()
+        {
+            DataTable newtable = new DataTable();
+
+
+            // method 3
+            newtable.Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("ID", typeof(int)),
+                new DataColumn("Name", typeof(string)),
+                new DataColumn("Age", typeof(int)),
+                new DataColumn("Department", typeof(string))
+            });
+
+            DataRow row1 = newtable.NewRow();
+            row1["ID"] = 99;
+            row1["Name"] = "Imran";
+            row1["Age"] = 21;
+            row1["Department"] = "Software";
+            newtable.Rows.Add(row1);
+
+            newtable.Merge(tbl, true);
+
+            foreach (DataRow row in newtable.Rows)
+            {
+                Console.WriteLine($"{row["ID"],-5} {row["Name"],-15} {row["Age"],-5} {row["Department"],-10}");
+            }
+        }
+
+        public void deleteandRemove()
+        {
+            Console.WriteLine("Before Delete : ");
+            foreach (DataRow row in tbl.Rows)
+            {
+                Console.WriteLine($"{row["ID"],-5} {row["Name"],-15} {row["Age"],-5} {row["Department"],-10}");
+            }
+            Console.WriteLine();
+
+            foreach(DataRow row in tbl.Rows)
+            {
+                if (Convert.ToInt32(row[0]) == 2)
+                {
+                    row.Delete();
+                }
+            }
+            tbl.AcceptChanges(); // accept
+
+            Console.WriteLine("After Delete : ");
+            foreach (DataRow row in tbl.Rows)
+            {
+                Console.WriteLine($"{row["ID"],-5} {row["Name"],-15} {row["Age"],-5} {row["Department"],-10}");
+            }
+            Console.WriteLine();
+
+            foreach (DataRow row in tbl.Rows)
+            {
+                if (Convert.ToInt32(row[0]) == 3)
+                {
+                    row.Delete();
+                }
+            }
+
+            tbl.RejectChanges(); // reject
+
+            Console.WriteLine("After Delete (but reject it) : ");
+            foreach (DataRow row in tbl.Rows)
+            {
+                Console.WriteLine($"{row["ID"],-5} {row["Name"],-15} {row["Age"],-5} {row["Department"],-10}");
+            }
+            Console.WriteLine();
+
+            // remove
+            // Remove rows where ID = 3 using Remove()
+            DataRow[] rowsToRemove = tbl.Select("Id = 3");
+
+            foreach (DataRow row in rowsToRemove)
+            {
+                tbl.Rows.Remove(row);
+            }
+
+            //for (int i = tbl.Rows.Count - 1; i >= 0; i--)
+            //{
+            //    if (Convert.ToInt32(tbl.Rows[i]["Id"]) == 3)
+            //    {
+            //        tbl.Rows.Remove(tbl.Rows[i]);
+            //    }
+            //}
+
+            Console.WriteLine("After Remove : ");
+            foreach (DataRow row in tbl.Rows)
+            {
+                Console.WriteLine($"{row["ID"],-5} {row["Name"],-15} {row["Age"],-5} {row["Department"],-10}");
+            }
+            Console.WriteLine();
         }
     }
 }
