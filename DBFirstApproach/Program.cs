@@ -16,7 +16,7 @@ namespace DbFirstApproach
             Console.WriteLine("---------------------------------");
             Console.WriteLine("-------------| Menu |------------");
             Console.WriteLine("---------------------------------");
-            Console.WriteLine("| 1.                 Main       |");
+            Console.WriteLine("| 1.                 Basic CRUD |");
             Console.WriteLine("| 5.                 EXIT       |");
             Console.WriteLine("---------------------------------");
 
