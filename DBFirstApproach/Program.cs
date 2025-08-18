@@ -8,20 +8,29 @@ namespace DbFirstApproach
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             //read
             CrudOp crud = new CrudOp();
 
-            Console.WriteLine("---------------------------------");
-            Console.WriteLine("-------------| Menu |------------");
-            Console.WriteLine("---------------------------------");
-            Console.WriteLine("| 1.                 Basic CRUD |");
-            Console.WriteLine("| 5.                 EXIT       |");
-            Console.WriteLine("---------------------------------");
+            //bulk 
+            Bulk bulk = new Bulk();
 
-            while(true)
+            // linq
+            Linq linq = new Linq();
+
+            while (true)
             {
+
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine("-------------| Menu |------------");
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine("| 1.                 BASIC CRUD |");
+                Console.WriteLine("| 2.                 BULK CRUD  |");
+                Console.WriteLine("| 3.                 LINQ       |");
+                Console.WriteLine("| 4.                 EXIT       |");
+                Console.WriteLine("---------------------------------");
+
                 Console.Write("Enter the Code to Run : ");
                 string code = Console.ReadLine();
 
@@ -31,6 +40,12 @@ namespace DbFirstApproach
                         crud.crudmethod();
                         break;
                     case "2":
+                        await bulk.crudmethod();
+                        break;
+                    case "3":
+                        linq.linqMethod();
+                        break;
+                    case "4":
                         Console.WriteLine("Thank you");
                         return;
                     default:
