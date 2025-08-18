@@ -112,7 +112,7 @@ namespace DbFirstApproach
 
             } while (Choice.ToLower() == "yes");
 
-            using(var dbcontext = new StudentsEntities())
+            using (var dbcontext = new StudentsEntities())
             {
                 dbcontext.Students.AddRange(studentsInsert);
                 await dbcontext.SaveChangesAsync();
@@ -147,11 +147,11 @@ namespace DbFirstApproach
 
                 foreach (var student in studentUpdate)
                 {
-                    student.Name = "Hello";
+                    student.Name = "HELLO";
                 }
 
                 dbcontext.Students.BulkUpdate(studentUpdate);
-                
+
             }
         }
 
@@ -162,7 +162,7 @@ namespace DbFirstApproach
             //    var studentsToDelete = await dbcontext.Students.Where(s => s.Age < 18).ToListAsync();
 
             //    dbcontext.Students.RemoveRange(studentsToDelete);
-                
+
             //    await dbcontext.SaveChangesAsync();
             //}
 
