@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Common.CommandTrees;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -21,7 +23,8 @@ namespace DbFirstApproach
                 Console.WriteLine("| 2.                 Where      |");
                 Console.WriteLine("| 3.                 Orders     |");
                 Console.WriteLine("| 4.                 Aggregate  |");
-                Console.WriteLine("| 5.                 EXIT       |");
+                Console.WriteLine("| 5.                 Join       |");
+                Console.WriteLine("| 6.                 EXIT       |");
                 Console.WriteLine("---------------------------------");
 
                 Console.Write("Enter the Code to Run : ");
@@ -42,6 +45,9 @@ namespace DbFirstApproach
                         aggMethod();
                         break;
                     case "5":
+                        joinMethod();
+                        break;
+                    case "6":
                         Console.WriteLine("Thank you");
                         return;
                     default:
@@ -140,25 +146,39 @@ namespace DbFirstApproach
 
                 Console.WriteLine();
 
-                // select --- for array store
-                var students2 = dbcontext.Departments
-                                .Select(d => new
-                                {
-                                    DepartmentName = d.DepartmentName,
-                                    StudentName = d.Students
-                                })
-                                .ToList();
+                 
 
-                Console.WriteLine("Department and their Students:");
-                foreach (var dept in students2)
+                var students2 = dbcontext.Departments.Select(d => new
                 {
-                    Console.WriteLine("Department: " + dept.DepartmentName);
+                    DepartmentName = d.DepartmentName,
+                    StudentNames = d.Students.Select(x => x.Name).ToList()
+                }).ToList();
 
-                    foreach (var student in dept.StudentName)  
-                    {
-                        Console.WriteLine("   Student: " + student.Name);
-                    }
+                foreach (var item in students2)
+                {
+                    string studentNames = string.Join(", ", item.StudentNames);
+                    Console.WriteLine($"{item.DepartmentName} - {studentNames}");
                 }
+
+                //select --- for array store
+                //var students2 = dbcontext.Departments
+                //                .Select(d => new
+                //                {
+                //                    DepartmentName = d.DepartmentName,
+                //                    StudentName = d.Students
+                //                })
+                //                .ToList();
+
+                //Console.WriteLine("Department and their Students:");
+                //foreach (var dept in students2)
+                //{
+                //    Console.WriteLine("Department: " + dept.DepartmentName);
+
+                //    foreach (var student in dept.StudentName)
+                //    {
+                //        Console.WriteLine("   Student: " + student.Name);
+                //    }
+                //}
             }
         }
 
@@ -320,6 +340,110 @@ namespace DbFirstApproach
                     Console.WriteLine($"{item.DepartmentName} - Average Age: {item.AvgAge}");
                 }
 
+            }
+        }
+
+        public void joinMethod()
+        {
+            using(var dbcontext = new StudentsEntities())
+            {
+
+                // inner join
+                var Student = dbcontext.Students
+                    .Join(dbcontext.Departments, 
+                    s => s.DepartmentID, 
+                    d => d.DepartmentID, 
+                    (s, d) => new
+                    {
+                    Name = s.Name,
+                    DepartmentName = d.DepartmentName
+                });
+
+                //var innerJoin = from s in dbcontext.Students
+                //                join d in dbcontext.Departments
+                //                on s.DepartmentID equals d.DepartmentID
+                //                select new
+                //                {
+                //                    Name = s.Name,
+                //                    DepartmentName = d.DepartmentName
+                //                };
+
+                foreach (var stu in Student)
+                {
+                    Console.WriteLine(stu.Name+" "+stu.DepartmentName );
+                }
+
+
+                // multiple join
+                var studentMul = dbcontext.Students
+                            .Join(
+                                dbcontext.Departments,
+                                s => s.DepartmentID,
+                                d => d.DepartmentID,
+                                (s, d) => new { s, d }
+                            )
+                            .Join(
+                                dbcontext.Courses,
+                                sd => sd.d.DepartmentID,
+                                c => c.DepartmentID,
+                                (sd, c) => new
+                                {
+                                    StudentName = sd.s.Name,
+                                    DepartmentName = sd.d.DepartmentName,
+                                    CourseName = c.CourseName
+                                }
+                            )
+                            .ToList();
+
+                //var multipleJoin = from s in dbcontext.Students
+                //                   join d in dbcontext.Departments
+                //                   on s.DepartmentID equals d.DepartmentID
+                //                   join c in dbcontext.Courses
+                //                   on d.DepartmentID equals c.DepartmentID
+                //                   select new
+                //                   {
+                //                       StudentName = s.Name,
+                //                       DepartmentName = d.DepartmentName,
+                //                       CourseName = c.CourseName
+                //                   };
+
+                foreach (var item in studentMul)
+                {
+                    Console.WriteLine($"{item.StudentName} - {item.DepartmentName} - {item.CourseName}");
+                }
+
+                // left join
+                var studentLeft = dbcontext.Departments
+                        .GroupJoin(
+                            dbcontext.Students,
+                            d => d.DepartmentID,
+                            s => s.DepartmentID,
+                            (d, studentsGroup) => new { Department = d, StudentsGroup = studentsGroup }
+                        )
+                        .SelectMany(
+                            x => x.StudentsGroup.DefaultIfEmpty(), 
+                            (x, s) => new
+                            {
+                                DepartmentName = x.Department.DepartmentName,
+                                StudentName = s != null ? s.Name : "No Student"
+                            }
+                        )
+                        .ToList();
+
+                //var leftJoin = from d in dbcontext.Departments
+                //               join s in dbcontext.Students
+                //               on d.DepartmentID equals s.DepartmentID into studentGroup
+                //               from sg in studentGroup.DefaultIfEmpty() // left join
+                //               select new
+                //               {
+                //                   DepartmentName = d.DepartmentName,
+                //                   StudentName = sg != null ? sg.Name : "No Student"
+                //               };
+
+                foreach (var item in studentLeft)
+                {
+                    Console.WriteLine($"{item.DepartmentName} - {item.StudentName}");
+                }
             }
         }
     }
