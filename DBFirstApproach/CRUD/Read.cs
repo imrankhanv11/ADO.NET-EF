@@ -13,18 +13,19 @@ namespace DbFirstApproach
         InputValidation input = new InputValidation();
         public void crudmethod()
         {
-            Console.WriteLine("----------------------------------------");
-            Console.WriteLine("----------------| Menu |----------------");
-            Console.WriteLine("----------------------------------------");
-            Console.WriteLine("| 1.                 ReadStudent       |");
-            Console.WriteLine("| 2.                 AddSTudent        |");
-            Console.WriteLine("| 3.                 DeleteStudent     |");
-            Console.WriteLine("| 4.                 UpdateStudent     |");
-            Console.WriteLine("| 5.                 Exit              |");
-            Console.WriteLine("----------------------------------------");
 
             while (true)
             {
+                Console.WriteLine("----------------------------------------");
+                Console.WriteLine("----------------| Menu |----------------");
+                Console.WriteLine("----------------------------------------");
+                Console.WriteLine("| 1.                 ReadStudent       |");
+                Console.WriteLine("| 2.                 AddSTudent        |");
+                Console.WriteLine("| 3.                 DeleteStudent     |");
+                Console.WriteLine("| 4.                 UpdateStudent     |");
+                Console.WriteLine("| 5.                 Exit              |");
+                Console.WriteLine("----------------------------------------");
+
                 Console.Write("Enter the Code to Run : ");
                 string code = Console.ReadLine();
 
@@ -80,7 +81,7 @@ namespace DbFirstApproach
             int Age = input.AgeCheck(checkAge);
 
         againcheckid:
-            Console.WriteLine("Student Department ID :");
+            Console.WriteLine("Student Department Name :");
             
             Dictionary<int, int> code = new Dictionary<int, int>();
             using(var dbcontext = new StudentsEntities())
@@ -214,7 +215,7 @@ namespace DbFirstApproach
                             break;
                         case "4":
 
-                            Console.WriteLine("Student Department ID to update :");
+                            Console.WriteLine("Student Department Name to update :");
 
                             Dictionary<int, int> codevalue = new Dictionary<int, int>();
                             using (var dbcontextinner = new StudentsEntities())
