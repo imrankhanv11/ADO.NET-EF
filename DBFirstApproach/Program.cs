@@ -19,6 +19,9 @@ namespace DbFirstApproach
             // linq
             Linq linq = new Linq();
 
+            // sp
+            StoredProcedure sp = new StoredProcedure();
+
             while (true)
             {
 
@@ -28,7 +31,8 @@ namespace DbFirstApproach
                 Console.WriteLine("| 1.                 BASIC CRUD |");
                 Console.WriteLine("| 2.                 BULK CRUD  |");
                 Console.WriteLine("| 3.                 LINQ       |");
-                Console.WriteLine("| 4.                 EXIT       |");
+                Console.WriteLine("| 4.                 SP         |");
+                Console.WriteLine("| 5.                 EXIT       |");
                 Console.WriteLine("---------------------------------");
 
                 Console.Write("Enter the Code to Run : ");
@@ -46,6 +50,9 @@ namespace DbFirstApproach
                         linq.linqMethod();
                         break;
                     case "4":
+                        sp.sp();
+                        break;
+                    case "5":
                         Console.WriteLine("Thank you");
                         return;
                     default:
