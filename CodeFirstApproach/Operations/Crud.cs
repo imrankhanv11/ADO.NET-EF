@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeFirstApproach.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace CodeFirstApproach.Operations
                 switch (code)
                 {
                     case "1":
-
+                        read();
                         break;
                     case "2":
 
@@ -41,6 +42,23 @@ namespace CodeFirstApproach.Operations
                         Console.WriteLine("Try again");
                         break;
                 }
+            }
+        }
+
+        public void read()
+        {
+            using (var dbcontext = new EmployeeModel())
+            {
+                var student = dbcontext.Employee.Select(e => new EmployeeDto { 
+                        Name = e.Name,
+                        Gender = e.Gender
+                });
+
+                foreach(var emp in student)
+                {
+                    Console.WriteLine(emp.Name + " " + emp.Gender);
+                }
+
             }
         }
     }
