@@ -1,4 +1,5 @@
-﻿using DBFirst_EFCore_01.DTO;
+﻿using DBFirst_EFCore_01.Data;
+using DBFirst_EFCore_01.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -57,7 +58,17 @@ public partial class StudentContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // seed data
+        modelBuilder.Entity<Project>().HasData(
+            new Project { Id = 1, ProjectName = "Empty" , Budget = 20000},
+            new Project { Id = 2, ProjectName = "Empty" , Budget = 30400}
+            );
 
+        // seed data via configuration
+        modelBuilder.ApplyConfiguration(new Benefitconfiguration());
+
+
+        // enitity dto
         modelBuilder.Entity<EmployeeDepartment>().HasNoKey();
 
         modelBuilder.Entity<empCount>().HasNoKey();
