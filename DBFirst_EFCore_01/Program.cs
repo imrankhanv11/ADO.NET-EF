@@ -11,6 +11,8 @@ namespace DBFirst_EFCore_01
         {
 
             sp_operations sp = new sp_operations();
+
+            insertBulk insert = new insertBulk();
             while (true)
             {
                 //select
@@ -23,8 +25,10 @@ namespace DBFirst_EFCore_01
                 Console.WriteLine("4.      projectCount");
                 //insertdepartment
                 Console.WriteLine("5.      InsertDepartment");
+                //list of data
+                Console.WriteLine("6       inserBulkEmp");
                 //exit
-                Console.WriteLine("6.      Exit");
+                Console.WriteLine("7.      Exit");
 
                 Console.Write("Enter the code : ");
                 string code = Console.ReadLine();
@@ -46,6 +50,9 @@ namespace DBFirst_EFCore_01
                         sp.insertDepartment();
                         break;
                     case "6":
+                        insert.insertemp(); 
+                        break;
+                    case "7":
                         Console.WriteLine("Thank You");
                         return;
                     default:
