@@ -20,7 +20,7 @@ namespace CodeFirstApproach.Models
 
         [Required]
         [StringLength(50)]
-        public string Location { get; set; }
+        public string Locations { get; set; }
 
         public virtual ICollection<Employees> Employees { get; set; }
 

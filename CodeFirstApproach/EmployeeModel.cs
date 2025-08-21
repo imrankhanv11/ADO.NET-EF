@@ -14,7 +14,6 @@ namespace CodeFirstApproach
 
         public DbSet<Employees> Employee {  get; set; }
         public DbSet<Department> department { get; set; }
-
         public DbSet<Projects> Projects { get; set; }
         public DbSet<EmployeeProject> EmployeesProjects {  get; set; }
 

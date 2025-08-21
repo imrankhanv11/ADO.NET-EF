@@ -63,6 +63,8 @@ namespace CodeFirstApproach.Operations
                     Console.WriteLine(emp.Name + " " + emp.Gender);
                 }
 
+
+                // Dapper
                 var connection = dbcontext.Database.Connection;
 
                 connection.Open();
@@ -182,7 +184,7 @@ namespace CodeFirstApproach.Operations
                         Department = new Department
                         {
                             DepartmentName = Department2,
-                            Location = Location2
+                            Locations = Location2
                         }
                     },
                     Projects = new Projects
