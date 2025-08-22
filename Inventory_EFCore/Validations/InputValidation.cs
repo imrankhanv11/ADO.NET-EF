@@ -41,15 +41,19 @@ namespace DbFirst_EFCore_01
                 try
                 {
                     value = Convert.ToInt32(input);
-                    if( value <= 0 || value > 120)
+
+                    if (value <= 0 || value > 120)
                     {
-                        throw new Exception("Age in out of range");
+                        Console.Write("Age is out of range. Please enter a value between 1 and 120: ");
+                        input = Console.ReadLine();
+                        continue;
                     }
+
                     break;
                 }
-                catch (FormatException)
+                catch (Exception)
                 {
-                    Console.Write("Enter the valid numerical value : ");
+                    Console.Write("Enter a valid numerical value: ");
                     input = Console.ReadLine();
                 }
             }
