@@ -1,62 +1,48 @@
-﻿using DBFirst_EFCore_01.Models;
-using DBFirst_EFCore_01.Operations;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using DbFirst_EFCore_01;
+using EFCore_DBFirstApp;
+using EFCore_DBFirstApp.Models;
 using System;
 
-namespace DBFirst_EFCore_01
+namespace EFCore_DBFirsstApp
 {
     public class Program
     {
         public static void Main(string[] args)
         {
 
-            sp_operations sp = new sp_operations();
+            InputsGetters inGet = new InputsGetters();
 
-            insertBulk insert = new insertBulk();
             while (true)
             {
-                //select
-                Console.WriteLine("1.      departmentEmp");
-                //select as count
-                Console.WriteLine("2.      departmentEmpID");
-                //input
-                Console.WriteLine("3.      employeeCount");
-                //output
-                Console.WriteLine("4.      projectCount");
-                //insertdepartment
-                Console.WriteLine("5.      InsertDepartment");
-                //list of data via dataTable --> sp ( UDTT )
-                Console.WriteLine("6       inserBulkEmp");
-                //exit
-                Console.WriteLine("7.      Exit");
+                Console.WriteLine("---------------------------------------------------");
+                Console.WriteLine("--------------------- OPTIONS ---------------------");
+                Console.WriteLine("---------------------------------------------------");
+                Console.WriteLine(" 1.                          Add Product ");
+                Console.WriteLine(" 2.                          Check Product Stock");
+                Console.WriteLine(" 3. ");
+                Console.WriteLine(" 4.                                 Exit");
+                Console.WriteLine("---------------------------------------------------");
 
-                Console.Write("Enter the code : ");
-                string code = Console.ReadLine();
+                Console.WriteLine();
+                Console.WriteLine("Enter the Option code : ");
+                string Code = Console.ReadLine();
 
-                switch (code) {
+                switch(Code)
+                {
                     case "1":
-                        sp.basicselect();
+                        inGet.addProuducts();
                         break;
                     case "2":
-                        sp.basicselect2();
+                        inGet.checkStockInput();
                         break;
                     case "3":
-                        sp.departmentEmpID();
+
                         break;
                     case "4":
-                        sp.projectcount();
-                        break;
-                    case "5":
-                        sp.insertDepartment();
-                        break;
-                    case "6":
-                        insert.insertemp(); 
-                        break;
-                    case "7":
                         Console.WriteLine("Thank You");
                         return;
                     default:
-                        Console.WriteLine("try agian");
+                        Console.WriteLine("Try Again");
                         break;
                 }
             }
