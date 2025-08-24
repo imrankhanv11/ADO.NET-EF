@@ -115,6 +115,23 @@ namespace EFCore_DBFirstApp
                 {
                     Console.WriteLine(item.categoryName + " : " + item.productName);
                 }
+
+                // join (inner)
+                var output3 = from c in dbcontext.Categories
+                             join p in dbcontext.Products
+                             on c.CategoryId equals p.CategoryId
+                             join pr in dbcontext.ProductReviews
+                             on p.ProductId equals pr.ProductId
+                             select new {
+                                CategoryName = c.CategoryName,
+                                ProductName = p.Name,
+                                ProductReviews = pr.Rating
+                };
+
+                foreach (var item in output3)
+                {
+                    Console.WriteLine(item.CategoryName + " " + item.ProductName + " " + item.ProductReviews);
+                }
             }
         }
     }
