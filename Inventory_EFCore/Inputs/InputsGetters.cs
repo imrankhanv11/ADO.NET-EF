@@ -121,5 +121,107 @@ namespace EFCore_DBFirstApp
         {
             op.ProductWithCat();
         }
+
+        public void insertReview()
+        {
+            Console.WriteLine("Choose the Product : ");
+            int ProuductID;
+            using( var dbcontext = new InventoryContext())
+            {
+                var prouducts = dbcontext.Products.ToList();
+            ReacheckprouductID:
+                foreach (var item in prouducts)
+                {
+                    Console.WriteLine($"{item.ProductId} : {item.Name}");
+                }
+
+                Console.Write("Enter the Product ID : ");
+                string checkId = Console.ReadLine();
+                ProuductID = input.IntCheck(checkId);
+
+                if(!prouducts.Any(p=> p.ProductId == ProuductID))
+                {
+                    Console.WriteLine("Try Again ");
+                    goto ReacheckprouductID;
+                }
+            }
+
+            Console.Write("Enter the Customer ID : ");
+            string checkID = Console.ReadLine();
+            int CustomerID = input.IntCheck(checkID);
+
+            Console.Write("Enter the Raing : ");
+            string checkRating = Console.ReadLine();
+            int Rating = input.RatingCheck(checkRating);
+
+            Console.Write("Enter the commands : ");
+            string Commads = Console.ReadLine();
+
+            AddReview newone = new AddReview
+            {
+                productID = ProuductID,
+                CustomerID = CustomerID,
+                Rating = Rating,
+                Commands = Commads,
+                Date = DateOnly.FromDateTime(DateTime.Now)
+            };
+
+            op.AddReviews(newone);
+        }
+
+        public void InsertBulkProductsinput()
+        {
+            List<NewProductBulk> Prouducts = new List<NewProductBulk>();
+
+            string Check;
+            do
+            {
+                Console.Write("Enter the Product Name : ");
+                string checkName = Console.ReadLine();
+                string Name = input.StringCheck(checkName);
+
+                Console.Write("Choose the Category ID : ");
+                int CategoryID;
+                using(var dbcontext = new InventoryContext())
+                {
+                    var category = dbcontext.Categories.ToList();
+
+                CheckAgain_CategoryID:
+                    foreach (var item in category)
+                    {
+                        Console.WriteLine($"ID : {item.CategoryId}, Category : {item.CategoryName}");
+                    }
+
+                    Console.Write("Enter the Category ID : ");
+                    string checkId = Console.ReadLine();
+                    CategoryID = input.IntCheck(checkId);
+
+
+                    if(!category.Any(c=> c.CategoryId == CategoryID)){
+                        Console.WriteLine("Id Not found Try again");
+                        goto CheckAgain_CategoryID;
+                    }
+                }
+
+                Console.Write("Enter the Price : ");
+                string checkPrice = Console.ReadLine();
+                int Price = input.IntCheck(checkPrice);
+
+                var newProduct = new NewProductBulk
+                {
+                    ProductName = Name,
+                    CategoryId = CategoryID,
+                    Price = Price
+                };
+
+                Prouducts.Add(newProduct);
+
+                Console.Write("Do you want to Continues (yes/no) : ");
+                Check = Console.ReadLine().Trim().ToLower();
+            } while (Check == "yes");
+
+            op.BulkInsertProducts(Prouducts);
+            
+        }
     }
 }

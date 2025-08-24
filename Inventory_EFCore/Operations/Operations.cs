@@ -156,6 +156,53 @@ namespace EFCore_DBFirstApp
                 {
                     Console.WriteLine($"{item.CategoryName} | {item.ProductName} | {item.Rating}");
                 }
+
+                //var output4 = from c in dbcontext.Categories
+                //              join p in dbcontext.Products
+                //                  on c.CategoryId equals p.CategoryId
+                //              join pr in dbcontext.ProductReviews
+                //                  on p.ProductId equals pr.ProductId into gj
+                //              from pr in gj.DefaultIfEmpty()   // LEFT JOIN
+                //              select new
+                //              {
+                //                  CategoryName = c.CategoryName,
+                //                  ProductName = p.Name,
+                //                  Rating = pr != null ? pr.Rating : 0
+                //              };
+            }
+        }
+
+        public void AddReviews(AddReview input)
+        {
+            var reviews = new ProductReview
+            {
+                CustomerId = input.CustomerID,
+                ProductId = input.productID,
+                Rating = input.Rating,
+                Comments = input.Commands,
+                ReviewDate = input.Date
+            };
+
+            using(var dbcontext = new InventoryContext())
+            {
+                dbcontext.Add(reviews);
+                dbcontext.SaveChanges();
+            }
+        }
+
+        public void BulkInsertProducts(List<NewProductBulk> input)
+        {
+            using (var dbcontext = new InventoryContext())
+            {
+                var products = input.Select(x => new Product
+                {
+                    Name = x.ProductName,
+                    CategoryId = x.CategoryId,
+                    Price = x.Price
+                }).ToList();
+
+                dbcontext.Products.AddRange(products);
+                dbcontext.SaveChanges();
             }
         }
     }

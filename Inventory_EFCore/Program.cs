@@ -20,11 +20,13 @@ namespace EFCore_DBFirsstApp
                 Console.WriteLine(" 1.                          Add Product ");
                 Console.WriteLine(" 2.                          Check Product Stock");
                 Console.WriteLine(" 3.                          Availabe Products-Cat");
-                Console.WriteLine(" 4.                                 Exit");
+                Console.WriteLine(" 4.                          Insert Product Review");
+                Console.WriteLine(" 5.                          Bulk Prouduct Insert");
+                Console.WriteLine(" 6.                          Exit");
                 Console.WriteLine("---------------------------------------------------");
 
                 Console.WriteLine();
-                Console.WriteLine("Enter the Option code : ");
+                Console.Write("Enter the Option code : ");
                 string Code = Console.ReadLine();
 
                 switch(Code)
@@ -39,6 +41,12 @@ namespace EFCore_DBFirsstApp
                         inGet.ProductwithCatInput();
                         break;
                     case "4":
+                        inGet.insertReview();
+                        break;
+                    case "5":
+                        inGet.InsertBulkProductsinput();
+                        break;
+                    case "6":
                         Console.WriteLine("Thank You");
                         return;
                     default:
