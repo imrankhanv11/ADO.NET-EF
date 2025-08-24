@@ -22,7 +22,8 @@ namespace EFCore_DBFirsstApp
                 Console.WriteLine(" 3.                          Availabe Products-Cat");
                 Console.WriteLine(" 4.                          Insert Product Review");
                 Console.WriteLine(" 5.                          Bulk Prouduct Insert");
-                Console.WriteLine(" 6.                          Exit");
+                Console.WriteLine(" 6.                          Update Prize");
+                Console.WriteLine(" 7.                          Exit");
                 Console.WriteLine("---------------------------------------------------");
 
                 Console.WriteLine();
@@ -47,6 +48,9 @@ namespace EFCore_DBFirsstApp
                         inGet.InsertBulkProductsinput();
                         break;
                     case "6":
+                        inGet.UpdatePrizeinput();
+                        break;
+                    case "7":
                         Console.WriteLine("Thank You");
                         return;
                     default:

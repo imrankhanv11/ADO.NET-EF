@@ -205,6 +205,22 @@ namespace EFCore_DBFirstApp
                 dbcontext.SaveChanges();
             }
         }
+
+        public void UpdatePrize(int ID)
+        {
+            using(var dbcontext = new InventoryContext())
+            {
+                var updateProduct = dbcontext.Products.Where(u => u.CategoryId == ID).ToList();
+
+                foreach (var item in updateProduct)
+                {
+                    int up = (int)(item.Price * 0.10m);
+                    item.Price += up;
+                }
+
+                dbcontext.SaveChanges();
+            }
+        }
     }
 }
 

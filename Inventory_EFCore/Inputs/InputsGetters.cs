@@ -14,7 +14,7 @@ namespace EFCore_DBFirstApp
 
         InputValidation input = new InputValidation();
 
-        Operations op = new Operations();
+        private readonly Operations op = new Operations();
         public void addProuducts()
         {
 
@@ -222,6 +222,32 @@ namespace EFCore_DBFirstApp
 
             op.BulkInsertProducts(Prouducts);
             
+        }
+        public void UpdatePrizeinput()
+        {
+            Console.Write("Choose the Category : ");
+            int CategoryID;
+            using(var dbcontext = new InventoryContext())
+            {
+                var Category = dbcontext.Categories.ToList();
+
+            CheckCategoryID:
+                foreach (var item in Category)
+                {
+                    Console.WriteLine($"ID : {item.CategoryId}, Category : {item.CategoryName}");
+                }
+
+                Console.Write("Enter the Category Id : ");
+                CategoryID = input.IntCheck(Console.ReadLine());
+
+                if(!Category.Any(c=> c.CategoryId == CategoryID))
+                {
+                    Console.WriteLine("ID not found try agian");
+                    goto CheckCategoryID;
+                }
+            }
+
+            op.UpdatePrize(CategoryID);
         }
     }
 }
