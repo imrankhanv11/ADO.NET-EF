@@ -132,6 +132,30 @@ namespace EFCore_DBFirstApp
                 {
                     Console.WriteLine(item.CategoryName + " " + item.ProductName + " " + item.ProductReviews);
                 }
+
+                // include null
+                var output4 = dbcontext.Categories
+                            .Join(dbcontext.Products,
+                                c => c.CategoryId,
+                                p => p.CategoryId,
+                                (c, p) => new { c, p })
+                            .GroupJoin(dbcontext.ProductReviews,
+                                cp => cp.p.ProductId,
+                                pr => pr.ProductId,
+                                (cp, prs) => new { cp, prs })
+                            .SelectMany(
+                                x => x.prs.DefaultIfEmpty(), 
+                                (x, pr) => new
+                                {
+                                    CategoryName = x.cp.c.CategoryName,
+                                    ProductName = x.cp.p.Name,
+                                    Rating = pr != null ? pr.Rating : 0
+                                });
+
+                foreach (var item in output4)
+                {
+                    Console.WriteLine($"{item.CategoryName} | {item.ProductName} | {item.Rating}");
+                }
             }
         }
     }
