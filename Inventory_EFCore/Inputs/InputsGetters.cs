@@ -223,11 +223,12 @@ namespace EFCore_DBFirstApp
             op.BulkInsertProducts(Prouducts);
             
         }
+
         public void UpdatePrizeinput()
         {
             Console.Write("Choose the Category : ");
             int CategoryID;
-            using(var dbcontext = new InventoryContext())
+            using (var dbcontext = new InventoryContext())
             {
                 var Category = dbcontext.Categories.ToList();
 
@@ -240,7 +241,7 @@ namespace EFCore_DBFirstApp
                 Console.Write("Enter the Category Id : ");
                 CategoryID = input.IntCheck(Console.ReadLine());
 
-                if(!Category.Any(c=> c.CategoryId == CategoryID))
+                if (!Category.Any(c => c.CategoryId == CategoryID))
                 {
                     Console.WriteLine("ID not found try agian");
                     goto CheckCategoryID;
@@ -248,6 +249,66 @@ namespace EFCore_DBFirstApp
             }
 
             op.UpdatePrize(CategoryID);
+        }
+
+        public void PurchaseProduct()
+        {
+            List<SaleProductList> products = new List<SaleProductList>();
+            string check;
+            do
+            {
+                Console.Write("Choose the Product : ");
+                int ProductID;
+                decimal Prize;
+                using (var dbcontext = new InventoryContext())
+                {
+                    var Product = dbcontext.Products.ToList();
+                CheckAgain_ProductID:
+                    foreach (var item in Product)
+                    {
+                        Console.WriteLine($"Id : {item.ProductId}, Product : {item.Name}");
+                    }
+
+
+                    Console.Write("Enter the Product Id : ");
+                    ProductID = input.IntCheck(Console.ReadLine());
+
+                    if (!Product.Any(p => p.ProductId == ProductID))
+                    {
+                        Console.WriteLine("ID not found Try Again");
+                        goto CheckAgain_ProductID;
+                    }
+                    var product = dbcontext.Products.Find(ProductID);
+                    Prize = (decimal)product.Price;
+                }
+
+                Console.Write("Enter the Quantity : ");
+                int Quantity = input.IntCheck(Console.ReadLine());
+
+                var value = new SaleProductList
+                {
+                    ProductId = ProductID,
+                    Quantity = Quantity,
+                    Price = Prize,
+                };
+
+                products.Add(value);
+
+                Console.Write("Do you want to add new Product (yes/no) : ");
+                check = input.StringCheck(Console.ReadLine().ToLower().Trim());
+
+            } while (check == "yes");
+
+            Console.Write("Enter the Customer ID : ");
+            string CheckCustomerID = Console.ReadLine();
+            int CustomerID = input.IntCheck(CheckCustomerID);
+
+            Console.Write("Enter the UserID : ");
+            string checkUserID = Console.ReadLine();
+            int UserID = input.IntCheck(checkUserID);
+
+
+            op.SaleProductus(products, CustomerID, UserID);
         }
     }
 }

@@ -221,6 +221,42 @@ namespace EFCore_DBFirstApp
                 dbcontext.SaveChanges();
             }
         }
+
+        public void SaleProductus(List<SaleProductList> saleList, int customerID, int userID)
+        {
+            decimal totalAmount = 0;
+            foreach (var item in saleList)
+            {
+                totalAmount += item.Price;
+            }
+
+            var saleTotal = new Sale
+            {
+                CustomerId = customerID,
+                SaleDate = DateOnly.FromDateTime(DateTime.Now),
+                TotalPrice = totalAmount,
+                UserId = userID
+            };
+
+            using(var dbcontext = new InventoryContext())
+            {
+                dbcontext.Add(saleTotal);
+                dbcontext.SaveChanges();
+
+                int saleID = saleTotal.SaleId;
+
+                var Productdetials = saleList.Select(e => new SalesDetail
+                {
+                    SaleId = saleID,
+                    ProductId = e.ProductId,
+                    Quantity = e.Quantity,
+                    Price = e.Price,
+                });
+
+                dbcontext.AddRange(Productdetials);
+                dbcontext.SaveChanges();
+            }
+        }
     }
 }
 
