@@ -19,7 +19,7 @@ namespace EFCore_DBFirsstApp
                 Console.WriteLine("---------------------------------------------------");
                 Console.WriteLine(" 1.                          Add Product ");
                 Console.WriteLine(" 2.                          Check Product Stock");
-                Console.WriteLine(" 3. ");
+                Console.WriteLine(" 3.                          Availabe Products-Cat");
                 Console.WriteLine(" 4.                                 Exit");
                 Console.WriteLine("---------------------------------------------------");
 
@@ -36,7 +36,7 @@ namespace EFCore_DBFirsstApp
                         inGet.checkStockInput();
                         break;
                     case "3":
-
+                        inGet.ProductwithCatInput();
                         break;
                     case "4":
                         Console.WriteLine("Thank You");

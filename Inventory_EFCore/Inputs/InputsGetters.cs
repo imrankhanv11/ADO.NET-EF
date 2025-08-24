@@ -116,5 +116,10 @@ namespace EFCore_DBFirstApp
 
             op.CheckProuductStock(productId);
         }
+
+        public void ProductwithCatInput()
+        {
+            op.ProductWithCat();
+        }
     }
 }

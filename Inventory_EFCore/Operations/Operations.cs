@@ -82,6 +82,41 @@ namespace EFCore_DBFirstApp
                 }
             }
         }
+
+        public void ProductWithCat()
+        {
+            using(var dbcontext = new InventoryContext())
+            {
+                var output1 = dbcontext.Categories.ToList();
+
+                foreach (var item in output1)
+                {
+                    Console.WriteLine(item.CategoryName);
+
+                    foreach (var item1 in item.Products)
+                    {
+                        Console.WriteLine(item1.Name);
+                    }
+                    Console.WriteLine();
+                }
+
+                // Join (inner)
+                var output = dbcontext.Categories.Join(dbcontext.Products,
+                    c=> c.CategoryId,
+                    p=> p.CategoryId,
+                    (c,p)=> new
+                    {
+                        categoryName = c.CategoryName,
+                        productName = p.Name
+                    }
+                    );
+
+                foreach (var item in output)
+                {
+                    Console.WriteLine(item.categoryName + " : " + item.productName);
+                }
+            }
+        }
     }
 }
 
