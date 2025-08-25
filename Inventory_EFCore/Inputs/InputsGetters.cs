@@ -1,4 +1,4 @@
-﻿using DbFirst_EFCore_01;
+﻿using EFCore_DBFirsstApp;
 using EFCore_DBFirstApp.DTO;
 using EFCore_DBFirstApp.Models;
 using System;
@@ -309,6 +309,15 @@ namespace EFCore_DBFirstApp
 
 
             op.SaleProductus(products, CustomerID, UserID);
+        }
+
+        public void DapperInput()
+        {
+            Console.Write("Enter the Supplier ID : ");
+            string checkID = Console.ReadLine();
+            int SupplierID = input.IntCheck(checkID);
+
+            op.SupplierDetials(SupplierID);
         }
     }
 }

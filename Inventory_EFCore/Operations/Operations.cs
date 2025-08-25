@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Dapper;
+using System.Collections.Immutable;
 
 namespace EFCore_DBFirstApp
 {
@@ -255,6 +257,25 @@ namespace EFCore_DBFirstApp
 
                 dbcontext.AddRange(Productdetials);
                 dbcontext.SaveChanges();
+            }
+        }
+
+        public void SupplierDetials(int Id)
+        {
+            using(var dbcontext = new InventoryContext())
+            {
+                var connection = dbcontext.Database.GetDbConnection();
+
+                connection.Open();
+
+                string sql = @"Select Name from Suppliers where supplier_id = @id";
+                
+                var result = connection.Query<SupplierName>(sql, new {id = Id}).ToList();
+
+                foreach (var item in result)
+                {
+                    Console.WriteLine(item.Name);
+                }
             }
         }
     }

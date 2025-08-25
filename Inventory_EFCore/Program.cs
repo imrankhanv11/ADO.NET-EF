@@ -1,5 +1,4 @@
-﻿using DbFirst_EFCore_01;
-using EFCore_DBFirstApp;
+﻿using EFCore_DBFirstApp;
 using EFCore_DBFirstApp.Models;
 using System;
 
@@ -24,7 +23,8 @@ namespace EFCore_DBFirsstApp
                 Console.WriteLine(" 5.                          Bulk Prouduct Insert");
                 Console.WriteLine(" 6.                          Update Prize");
                 Console.WriteLine(" 7.                          Puchase Product ");
-                Console.WriteLine(" 8.                          Exit");
+                Console.WriteLine(" 8.                          Dapper");
+                Console.WriteLine(" 9.                          Exit");
                 Console.WriteLine("---------------------------------------------------");
 
                 Console.WriteLine();
@@ -55,6 +55,9 @@ namespace EFCore_DBFirsstApp
                         inGet.PurchaseProduct();
                         break;
                     case "8":
+                        inGet.DapperInput();
+                        break;
+                    case "9":
                         Console.WriteLine("Thank You");
                         return;
                     default:
