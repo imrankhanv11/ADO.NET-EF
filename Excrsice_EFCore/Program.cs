@@ -21,6 +21,7 @@ namespace Excersice_EFCore
                 Console.WriteLine(" 05.                List all products that are out of stock (SafetyStockLevel = 0).");
                 Console.WriteLine(" 06.                Get the 5 most recent orders placed.");
                 Console.WriteLine(" 07.                Get all orders for a given customer (include order date, product names, and total due)."); // not try in include
+                
                 // not complete
                 Console.WriteLine(" 08.                List all employees along with their managers’ names.");
 
@@ -29,9 +30,7 @@ namespace Excersice_EFCore
                 Console.WriteLine(" 11.                Get the average list price of products in each subcategory.");
                 Console.WriteLine(" 12.                Find the best-selling product by total quantity sold.");
                 Console.WriteLine(" 13.                Retrieve the top 5 salespeople with the highest sales in 2013.");
-                // not complete
                 Console.WriteLine(" 14.                Find customers who have never placed an order.");
-
                 Console.WriteLine(" 15.                For each territory, show the total sales amount and number of customers.");
                 Console.WriteLine(" 16.                SP ");
                 Console.WriteLine(" 17.                Run a raw SQL query to get products with ListPrice > 1000.");

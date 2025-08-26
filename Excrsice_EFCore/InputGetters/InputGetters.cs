@@ -1,6 +1,7 @@
 ﻿using Excersice_EFCore.DTO;
 using Excersice_EFCore.Models;
 using Excersice_EFCore.Validations;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using System;
@@ -358,7 +359,20 @@ namespace Excersice_EFCore
 
         public void SPoutput()
         {
+            using(var dbcontext = new AdventureWorksContext())
+            {
+                Console.Write("Enter the ID : ");
+                int ID = input.IntCheck(Console.ReadLine());
 
+                var InputID = new SqlParameter("@ID", ID);
+
+                var list = dbcontext.SpOuts.FromSqlRaw("EXEC uspGetEmployeeManagers @ID", InputID);
+
+                foreach (var item in list)
+                {
+                    Console.WriteLine(item.FirstName + " " + item.LastName + " " + item.RecursionLevel + " " + item.ManagerFirstName);
+                }
+            }
         }
         public void RawSQL()
         {
