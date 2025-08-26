@@ -68,7 +68,7 @@ namespace Excersice_EFCore
         {
             using(var dbcontext = new AdventureWorksContext())
             {
-                var list = dbcontext.Products.Take(10).OrderByDescending(p => p.ListPrice).Select(s => new
+                var list = dbcontext.Products.OrderByDescending(p => p.ListPrice).Take(10).Select(s => new
                 {
                     Name = s.Name,
                     Prize = s.ListPrice
@@ -86,10 +86,10 @@ namespace Excersice_EFCore
             using (var dbcontext = new AdventureWorksContext())
             {
                 var list = dbcontext.Customers
-                            .Include(c => c.Person)
-                                .ThenInclude(p => p.BusinessEntity)
-                                    .ThenInclude(be => be.BusinessEntityAddresses)
-                                        .ThenInclude(ba => ba.Address)
+                            //.Include(c => c.Person)
+                            //    .ThenInclude(p => p.BusinessEntity)
+                            //        .ThenInclude(be => be.BusinessEntityAddresses)
+                            //            .ThenInclude(ba => ba.Address)
                             .Where(c => c.Person.BusinessEntity.BusinessEntityAddresses
                                          .Any(ba => ba.Address.City == "London"))
                             .Select(c => new
@@ -155,33 +155,33 @@ namespace Excersice_EFCore
             using (var dbcontext = new AdventureWorksContext())
             {
 
-                //var list = dbcontext.SalesOrderHeaders
-                //    .Where(soh => soh.CustomerId == CustomerID)
-                //    .Include(soh => soh.SalesOrderDetails)
-                //        .ThenInclude(sod => sod.SpecialOfferProduct)
-                //            .ThenInclude(sop => sop.Product)
-                //    .SelectMany(soh => soh.SalesOrderDetails.Select(sod => new
-                //    {
-                //        OrderDate = soh.OrderDate,
-                //        ProductName = sod.SpecialOfferProduct.Product.Name,
-                //        TotalAmount = soh.TotalDue
-                //    }))
-                //    .ToList();
+                var list = dbcontext.SalesOrderHeaders
+                    .Where(soh => soh.CustomerId == CustomerID)
+                    //.Include(soh => soh.SalesOrderDetails)
+                    //    .ThenInclude(sod => sod.SpecialOfferProduct)
+                    //        .ThenInclude(sop => sop.Product)
+                    .SelectMany(soh => soh.SalesOrderDetails.Select(sod => new
+                    {
+                        OrderDate = soh.OrderDate,
+                        productName = sod.SpecialOfferProduct.Product.Name,
+                        TotalAmount = soh.TotalDue
+                    }))
+                    .ToList();
 
-                var list = from soh in dbcontext.SalesOrderHeaders
-                           join sod in dbcontext.SalesOrderDetails
-                           on soh.SalesOrderId equals sod.SalesOrderId
-                           join sop in dbcontext.SpecialOfferProducts
-                           on sod.ProductId equals sop.ProductId
-                           join p in dbcontext.Products
-                           on sop.ProductId equals p.ProductId
-                           where (soh.CustomerId == CustomerID)
-                           select new
-                           {
-                               OrderDate = soh.OrderDate,
-                               productName = p.Name,
-                               TotalAmount = soh.TotalDue
-                           };
+                //var list = from soh in dbcontext.SalesOrderHeaders
+                //           join sod in dbcontext.SalesOrderDetails
+                //           on soh.SalesOrderId equals sod.SalesOrderId
+                //           join sop in dbcontext.SpecialOfferProducts
+                //           on sod.ProductId equals sop.ProductId
+                //           join p in dbcontext.Products
+                //           on sop.ProductId equals p.ProductId
+                //           where (soh.CustomerId == CustomerID)
+                //           select new
+                //           {
+                //               OrderDate = soh.OrderDate,
+                //               productName = p.Name,
+                //               TotalAmount = soh.TotalDue
+                //           };
 
                 if (list == null)
                 {
@@ -250,10 +250,21 @@ namespace Excersice_EFCore
                         Value = e.Average(m => m.ListPrice)
                     }).ToList();
 
+                //var list2 = dbcontext.ProductSubcategories.Select(s => new
+                //{
+                //    Name = s.Name,
+                //    Category = s.ProductSubcategoryId,
+                //    Value = s.Products.Average(s => s.ListPrice)
+                //}).ToList();
+
                 foreach (var item in list)
                 {
                     Console.WriteLine($"Caegory ID : {item.Category,-10} Name : {item.Name,-20} AvgPrice : {item.Value}");
                 }
+                //foreach (var item in list2)
+                //{
+                //    Console.WriteLine($"Caegory ID : {item.Category,-10} Name : {item.Name,-20} AvgPrice : {item.Value}");
+                //}
             }
         }
 
@@ -270,9 +281,20 @@ namespace Excersice_EFCore
                 Take(1)
                 .ToList();
 
+                var list1 = dbcontext.Products.Select(s => new
+                {
+                    ID = s.ProductId,
+                    Name = s.Name,
+                    Value = s.SpecialOfferProducts.SelectMany(m => m.SalesOrderDetails).Sum(s=> s.OrderQty)
+                }).OrderByDescending(e => e.Value).Take(1).ToList();
+
                 foreach (var item in list)
                 {
                     Console.WriteLine(item.ID + " : " +item.Name +" - "+ item.Value);
+                }
+                foreach (var item in list1)
+                {
+                    Console.WriteLine(item.ID + " : " + item.Name + " - " + item.Value);
                 }
             }
         }
@@ -690,6 +712,7 @@ namespace Excersice_EFCore
             }
 
         }
+
 
     }
 }
