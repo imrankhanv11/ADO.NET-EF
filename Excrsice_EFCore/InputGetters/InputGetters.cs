@@ -168,6 +168,7 @@ namespace Excersice_EFCore
                     }))
                     .ToList();
 
+                
                 //var list = from soh in dbcontext.SalesOrderHeaders
                 //           join sod in dbcontext.SalesOrderDetails
                 //           on soh.SalesOrderId equals sod.SalesOrderId
@@ -376,7 +377,6 @@ namespace Excersice_EFCore
                     Console.WriteLine($"TerritoryID : {item.ID,-5} Name : {item.Name,-20} Customers : {item.CustomerCount,-5} TotalSales : {item.TotalAmount}");
                 }
             }
-
         }
 
         public void SPoutput()
@@ -421,7 +421,7 @@ namespace Excersice_EFCore
                 {
                     Id = s.DepartmentId,
                     DepartmentName = s.Name,
-                    Count = s.EmployeeDepartmentHistories.Count()
+                    Count = s.EmployeeDepartmentHistories.Select(m => m.BusinessEntity).Distinct().Count()
                 }).ToList();
 
                 foreach (var item in list)
@@ -713,7 +713,37 @@ namespace Excersice_EFCore
 
         }
 
+        public void DeptIDtoEmp()
+        {
+            Console.Write("Enter the Department ID : ");
+            int DepartmentID = input.IntCheck(Console.ReadLine());
+
+            using (var dbcontext = new AdventureWorksContext())
+            {
+
+                var list = dbcontext.Departments.Where(w=> w.DepartmentId ==  DepartmentID).Select(m => new
+                {
+                    Name = m.Name,
+                    EmployeeDetails = m.EmployeeDepartmentHistories
+                    .Select(c => new {
+                        EmpName = c.BusinessEntity.BusinessEntity.FirstName
+                    }).ToList()
+
+                }).ToList();
+
+                foreach (var item in list)
+                {
+                    Console.WriteLine(item.Name);
+
+                    foreach (var item1 in item.EmployeeDetails)
+                    {
+                        Console.WriteLine(item1.EmpName);
+                    }
+                }
+            }
+        }
 
     }
 }
+
 

@@ -53,6 +53,7 @@ namespace Excersice_EFCore
                 Console.WriteLine(" 32.                List all territories with more than 10 customers.");
                 Console.WriteLine(" 33.                Find products that were never ordered.");
                 Console.WriteLine(" 34.                List the top 3 product categories by number of products.");
+                Console.WriteLine(" 35.                DepartmentID to employeName");
                 Console.WriteLine("  0.                                     EXIT");
                 Console.WriteLine("----------------------------------------------------------------------------------------------");
 
@@ -163,6 +164,9 @@ namespace Excersice_EFCore
                         break;
                     case "34":
                         input.top3Cat();
+                        break;
+                    case "35":
+                        input.DeptIDtoEmp();
                         break;
 
                     case "0":
