@@ -256,6 +256,7 @@ namespace EFCore_DBFirstApp
                 });
 
                 dbcontext.AddRange(Productdetials);
+                //dbcontext.
                 dbcontext.SaveChanges();
             }
         }
@@ -277,6 +278,23 @@ namespace EFCore_DBFirstApp
                     Console.WriteLine(item.Name);
                 }
             }
+        }
+
+        public void PurchaseDetails()
+        {
+            using (var dbcontext = new InventoryContext())
+            {
+                var output = dbcontext.PurchaseDetialsViews
+                    .FromSqlRaw(@"SELECT sale_id, customer_name, sold_by, product_name, total_price  
+                      FROM vw_SalesDetails")
+                    .ToList();
+
+                foreach (var item in output)
+                {
+                    Console.WriteLine($"{item.sale_id} {item.custome_name} {item.sold_by} {item.product_name} {item.total_price}");
+                }
+            }
+
         }
     }
 }

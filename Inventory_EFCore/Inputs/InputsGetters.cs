@@ -319,5 +319,10 @@ namespace EFCore_DBFirstApp
 
             op.SupplierDetials(SupplierID);
         }
+
+        public void PurchaseDetails()
+        {
+            op.PurchaseDetails();
+        }
     }
 }

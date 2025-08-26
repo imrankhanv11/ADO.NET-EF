@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace DbFirst_EFCore_01
+namespace EFCore_DBFirsstApp
 {
     public class InputValidation
     {
@@ -33,6 +33,31 @@ namespace DbFirst_EFCore_01
             return value;
         }
 
+        public int RatingCheck(string input)
+        {
+            int value;
+            while (true)
+            {
+                try
+                {
+                    value = Convert.ToInt32(input);
+
+                    if (value < 0 || value > 5)
+                    {
+                        Console.WriteLine("Rating must be in 0 to 5");
+                        input = Console.ReadLine();
+                        continue;
+                    }
+                    break;
+                }
+                catch
+                {
+                    Console.WriteLine("Enter valid Numeric Value");
+                    input = Console.ReadLine();
+                }
+            }
+            return value;
+        }
         public int AgeCheck(string input)
         {
             int value;
@@ -66,7 +91,7 @@ namespace DbFirst_EFCore_01
             {
                 try
                 {
-                    if (string.IsNullOrEmpty(input))
+                    if (string.IsNullOrEmpty(input) || input.Trim().Length == 0)
                     {
                         throw new Exception("String cannot be empty");
                     }

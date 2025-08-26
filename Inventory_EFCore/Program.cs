@@ -16,15 +16,16 @@ namespace EFCore_DBFirsstApp
                 Console.WriteLine("---------------------------------------------------");
                 Console.WriteLine("--------------------- OPTIONS ---------------------");
                 Console.WriteLine("---------------------------------------------------");
-                Console.WriteLine(" 1.                          Add Product ");
-                Console.WriteLine(" 2.                          Check Product Stock");
-                Console.WriteLine(" 3.                          Availabe Products-Cat");
-                Console.WriteLine(" 4.                          Insert Product Review");
-                Console.WriteLine(" 5.                          Bulk Prouduct Insert");
-                Console.WriteLine(" 6.                          Update Prize");
-                Console.WriteLine(" 7.                          Puchase Product ");
-                Console.WriteLine(" 8.                          Dapper");
-                Console.WriteLine(" 9.                          Exit");
+                Console.WriteLine("  1.                          Add Product ");
+                Console.WriteLine("  2.                          Check Product Stock");
+                Console.WriteLine("  3.                          Availabe Products-Cat");
+                Console.WriteLine("  4.                          Insert Product Review");
+                Console.WriteLine("  5.                          Bulk Prouduct Insert");
+                Console.WriteLine("  6.                          Update Prize");
+                Console.WriteLine("  7.                          Puchase Product ");
+                Console.WriteLine("  8.                          Dapper");
+                Console.WriteLine("  9.                          Purchase Details view");
+                Console.WriteLine(" 10.                          Exit");
                 Console.WriteLine("---------------------------------------------------");
 
                 Console.WriteLine();
@@ -58,6 +59,9 @@ namespace EFCore_DBFirsstApp
                         inGet.DapperInput();
                         break;
                     case "9":
+                        inGet.PurchaseDetails();
+                        break;
+                    case "10":
                         Console.WriteLine("Thank You");
                         return;
                     default:
