@@ -926,7 +926,6 @@ namespace Excersice2_EFCoreNorthWind
                         .Select(o => new
                         {
                             o.OrderId,
-                            o.CustomerId,
                             o.Customer.CompanyName,
                             OrderValue = o.OrderDetails
                                 .Sum(od => od.UnitPrice * od.Quantity * (1 - (decimal)od.Discount))
@@ -941,6 +940,29 @@ namespace Excersice2_EFCoreNorthWind
                 foreach(var  item in result)
                 {
                     Console.WriteLine(item.CompanyName+" "+item.OrderId+" "+item.OrderValue);
+                }
+            }
+        }
+
+        public void CatOrderCus()
+        {
+            
+        }
+
+        public void MostProfitProduct()
+        {
+            using (var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Products.Select(s => new
+                {
+                    s.ProductId,
+                    s.ProductName,
+                    Total = s.OrderDetails.Sum(s => s.UnitPrice * s.Quantity * (1 - (decimal)s.Discount))
+                }).OrderByDescending(s => s.Total).Take(1).ToList();
+
+                foreach(var item in list)
+                {
+                    Console.WriteLine(item.ProductId + " " + item.ProductName + " " + item.Total);
                 }
             }
         }
