@@ -1,5 +1,7 @@
 ﻿using Excersice2_EFCoreNorthWind.Models;
 using Excersice2_EFCoreNorthWind.Validation;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
@@ -361,10 +363,10 @@ namespace Excersice2_EFCoreNorthWind
 
             Console.WriteLine("-----> Enter Employee Details <----");
             Console.WriteLine();
-            Console.Write("Enter the Manager First Name : ");
+            Console.Write("Enter the Employee First Name : ");
             string FirstNameemp = input.FirstNameCheck(Console.ReadLine());
 
-            Console.Write("Enter the Manager Last Name : ");
+            Console.Write("Enter the Employee Last Name : ");
             string LastNameemp = input.LastNameCheck(Console.ReadLine());
 
             Console.WriteLine("Enter the Title : ");
@@ -372,7 +374,7 @@ namespace Excersice2_EFCoreNorthWind
 
             string TitleofCoursceemp = "";
             bool checkemp = true;
-            while (check)
+            while (checkemp)
             {
                 Console.WriteLine("List of Tile of curtersy : ");
                 Console.WriteLine("1. Ms. ");
@@ -441,6 +443,506 @@ namespace Excersice2_EFCoreNorthWind
 
             }
 
+        }
+
+        public void InsertEmpwitMangerONE()
+        {
+            Console.Write("Enter the Employee First Name : ");
+            string FirstNameemp = input.FirstNameCheck(Console.ReadLine());
+
+            Console.Write("Enter the Employee Last Name : ");
+            string LastNameemp = input.LastNameCheck(Console.ReadLine());
+
+            Console.WriteLine("Enter the Title : ");
+            string Titleemp = input.TitleCheck(Console.ReadLine());
+
+            string TitleofCoursceemp = "";
+            bool checkemp = true;
+            while (checkemp)
+            {
+                Console.WriteLine("List of Tile of curtersy : ");
+                Console.WriteLine("1. Ms. ");
+                Console.WriteLine("2. Mr.");
+                Console.WriteLine("3. Dr.");
+
+                Console.Write("Enter the code to assign : ");
+                string code = Console.ReadLine();
+
+                switch (code)
+                {
+                    case "1":
+                        TitleofCoursceemp = "Ms.";
+                        checkemp = false;
+                        break;
+                    case "2":
+                        TitleofCoursceemp = "Mr.";
+                        checkemp = false;
+                        break;
+                    case "3":
+                        TitleofCoursceemp = "Dr.";
+                        checkemp = false;
+                        break;
+                    default:
+                        Console.WriteLine("not match try again");
+                        break;
+                }
+            }
+
+            int ID;
+            Console.WriteLine("Manager List :");
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Employees.ToList();
+
+            CHECK_mgrID:
+                foreach (var item in list)
+                {
+                    Console.WriteLine(item.EmployeeId + " : " + item.FirstName + " " + item.LastName);
+                }
+
+                Console.Write("Enter the Manager ID to assign : ");
+                ID = input.IntCheck(Console.ReadLine());
+
+                if(!dbcontext.Employees.Any(a=> a.EmployeeId == ID))
+                {
+                    Console.WriteLine("Manager ID not found ");
+                    goto CHECK_mgrID;
+                }
+            }
+
+            DateTime BirthDateemp = DateTime.Now;
+            DateTime HireDateemp = DateTime.Now;
+
+            Console.Write("Enter the Address : ");
+            string Addressemp = input.AddressCheck(Console.ReadLine());
+
+            Console.Write("Enter the City : ");
+            string Cityemp = input.CityCheck(Console.ReadLine());
+
+            Console.Write("Enter the Country : ");
+            string Countryemp = input.CountryCheck(Console.ReadLine());
+
+
+
+            using (var dbcontext = new NorthWindContext())
+            {
+                var employee = new Employee
+                {
+                    FirstName = FirstNameemp,
+                    LastName = LastNameemp,
+                    Title = Titleemp,
+                    TitleOfCourtesy = TitleofCoursceemp,
+                    BirthDate = BirthDateemp,
+                    HireDate = HireDateemp,
+                    Address = Addressemp,
+                    City = Cityemp,
+                    Country = Countryemp,
+                    ReportsTo = ID
+                };
+
+                dbcontext.Employees.Add(employee);
+                dbcontext.SaveChanges();
+
+            }
+        }
+
+        public void UpdateEmpManger()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+            CHECK_empID:
+                Console.Write("Enter the Employee ID to Update : ");
+                int EmployeeID = input.IntCheck(Console.ReadLine());
+
+                if(!dbcontext.Employees.Any(a=> a.EmployeeId == EmployeeID))
+                {
+                    Console.WriteLine("Emplyee not found try again");
+                    goto CHECK_empID;
+                }
+
+                var list = dbcontext.Employees.ToList();
+
+                foreach (var item in list)
+                {
+                    Console.WriteLine(item.EmployeeId + " : " + item.FirstName + " " + item.LastName);
+                }
+
+                Console.Write("Enter the Manger ID to update : ");
+                int ManagerID = input.IntCheck(Console.ReadLine());
+
+                var UpdateEmp = dbcontext.Employees.Where(w => w.EmployeeId == EmployeeID).ToList();
+
+                foreach(var item in UpdateEmp)
+                {
+                    item.ReportsTo = ManagerID;
+                }
+
+                dbcontext.SaveChanges();
+                Console.WriteLine("Sucessfully Changed the managerID ");
+            }
+        }
+
+        public void FindCustomerBetween()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Customers
+                        .Where(c =>
+                            c.Orders.Any(o => o.OrderDate.HasValue && o.OrderDate.Value.Year == 1997) &&
+                            !c.Orders.Any(o => o.OrderDate.HasValue && o.OrderDate.Value.Year == 1998)
+                        )
+                        .ToList();
+                foreach (var item in list)
+                {
+                    Console.WriteLine($"CustomerID : {item.CustomerId}, CompanyName : {item.CompanyName}");
+                }
+
+            }
+        }
+
+        public void CustomerRecentOrder()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Customers.Select(s => new
+                {
+                    CustomerID = s.CustomerId,
+                    CompanyName = s.CompanyName,
+                    OrderDate = s.Orders.Max(o => o.OrderDate)
+                });
+
+                foreach (var item in list)
+                {
+                    Console.WriteLine($"CustomerID : {item.CustomerID} Company Name : {item.CompanyName,-25} OrderDate : {item.OrderDate}");
+                }
+            }
+        }
+        
+        public void Order5000()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Customers
+                        .Select(c => new
+                        {
+                            c.CustomerId,
+                            c.CompanyName,
+                            TotalAmount = c.Orders
+                                .SelectMany(o => o.OrderDetails)
+                                .Sum(od => od.UnitPrice * od.Quantity * (1 - (decimal)od.Discount))
+                        })
+                        .Where(x => x.TotalAmount > 50000)
+                        .ToList();
+
+                foreach (var item in list)
+                {
+                    Console.WriteLine($"CustomerID : {item.CustomerId} CompanyName : {item.CompanyName,-30} Total Amount : {item.TotalAmount}");
+                }
+            }
+        }
+
+        public void CatAVG()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Categories.Select(s => new
+                {
+                    Name = s.CategoryName,
+                    Avg = s.Products.Average(s => s.UnitPrice)
+                });
+
+                foreach (var item in list)
+                {
+                    Console.WriteLine($"Category Name : {item.Name,-20} AVG Amount : {item.Avg}");
+                }
+
+            }
+        }
+
+        public void NotOrderProduct()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Products.Where(s => s.OrderDetails.Count() == 0).ToList();
+
+                foreach(var item in list)
+                {
+                    Console.WriteLine($"Product ID : {item.ProductId}, Product Name : {item.ProductName}");
+                }
+            }
+        }
+
+        public void Top3orderProduct()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Products.Select(s => new
+                {
+                    ID = s.ProductId,
+                    Name = s.ProductName,
+                    Quanity = s.OrderDetails.Sum(s => s.Quantity)
+                }).OrderByDescending(o => o.Quanity)
+                .Take(3).ToList();
+
+                foreach(var item in list)
+                {
+                    Console.WriteLine($"ID : {item.ID,-3} Name : {item.Name,-20} Quantity : {item.Quanity}");
+                }
+            }
+        }
+
+        public void ProductCATsup()
+        {
+            using (var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Products.Select(s => new
+                {
+                    Id = s.ProductId,
+                    Name = s.ProductName,
+                    Supplier = s.Supplier.CompanyName,
+                    Cat = s.Category.CategoryName
+                }).ToList();
+
+                foreach(var item in list)
+                {
+                    Console.WriteLine($"Id : {item.Id,-4} Product Name : {item.Name,-20} Supplier Name : {item.Supplier,-20} Category : {item.Cat} ");
+                }
+            }
+        }
+
+        public void UnitAVGCAt()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Products.Select(s => new
+                {
+                    Id = s.ProductId,
+                    Name = s.ProductName,
+                    Price = s.UnitPrice,
+                    Cat = s.Category.Products.Average(s => s.UnitPrice)
+                }).Where(s => s.Price > s.Cat).ToList();
+
+                foreach(var item in list)
+                {
+                    Console.WriteLine(item.Id + " " + item.Name + " " + item.Price + " " + item.Cat);
+                }
+            }
+        }
+
+        public void EmpwithTotalSaleAmount()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Employees.Select(s => new
+                {
+                    Id = s.EmployeeId,
+                    Name = s.FirstName + " " + s.LastName,
+                    Total = s.Orders.SelectMany(s => s.OrderDetails).Sum(s => s.UnitPrice * s.Quantity * (1 - (decimal)s.Discount))
+                }).ToList();
+
+                foreach(var item in list)
+                {
+                    Console.WriteLine($"ID : {item.Id,-3} Name : {item.Name,-20} Total Amount {item.Total}");
+                }
+            }
+        }
+
+        public void empMOST1997()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Employees.Select(s => new
+                {
+                    Id = s.EmployeeId,
+                    Name = s.FirstName + " " + s.LastName,
+                    TotalOrder = s.Orders.Count()
+                }).OrderByDescending(s=> s.TotalOrder).Take(1).ToList();
+
+                foreach(var item in list)
+                {
+                    Console.WriteLine($"Id : {item.Id,-4} Name : {item.Name,-25} Total Order Handled : {item.TotalOrder}");
+                }
+            }
+        }
+
+        public void empSameTER()
+        {
+            
+        }
+
+        public void DisCusEmp()
+        {
+            using (var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Employees.Select(s => new
+                {
+                    ID = s.EmployeeId,
+                    Name = s.FirstName + " " + s.LastName,
+                    Count = s.Orders.Select(s => s.Customer).Distinct().Count()
+                }).ToList();
+
+                foreach(var item in list)
+                {
+                    Console.WriteLine($"ID : {item.ID - 3} Name : {item.Name,-20} Distint Count : {item.Count}");
+                }
+            }
+        }
+
+        public void EmpWithFirstOrder()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Employees.Select(s => new
+                {
+                    Id = s.EmployeeId,
+                    Name = s.FirstName + " " + s.LastName,
+                    OrderDate = s.Orders.Min(s => s.OrderDate)
+                }).ToList();
+
+                foreach( var item in list)
+                {
+                    Console.WriteLine($"ID : {item.Id, -3} Name : {item.Name,-20} Order Date : {item.OrderDate}");
+                }
+            }
+        }
+
+        public void shipperAVGdel()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Shippers
+                        .Select(s => new
+                        {
+                            Name = s.CompanyName,
+                            AVGShipTime = s.Orders
+                                .Average(o => EF.Functions.DateDiffDay(o.OrderDate, o.ShippedDate))
+                        })
+                        .ToList();
+
+                foreach( var item in list)
+                {
+                    Console.WriteLine(item.Name + " --> " + item.AVGShipTime);
+                }
+            }
+        }
+
+        public void shipOrderMoreThan30()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Orders.Where(s => EF.Functions.DateDiffDay(s.OrderDate, s.ShippedDate) > 30)
+                    .Select(s => new 
+                    {
+                        id = s.OrderId,
+                        CustomerName = s.Customer.CompanyName,
+                        DateDiff = EF.Functions.DateDiffDay(s.OrderDate, s.ShippedDate)
+                    }).ToList();
+
+
+                foreach ( var item in list)
+                {
+                    Console.WriteLine($"ID : {item.id,-4} CustomerName : {item.CustomerName,-25} Time : {item.DateDiff}");
+                }
+            }
+        }
+
+        public void topShipper()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Shippers.Select(s => new
+                {
+                    Name = s.CompanyName,
+                    Orders = s.Orders.Count()
+                }).OrderByDescending(s => s.Orders).Take(1).ToList();
+
+                foreach(var item in list)
+                {
+                    Console.WriteLine(item.Name + " - " + item.Orders);
+                }
+            }
+        }
+
+        public void topEmpYear()
+        {
+            
+        }
+
+        public void ProductWithallCus()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var totalCustomers = dbcontext.Customers.Count();
+
+                var list = dbcontext.Products
+                    .Where(p =>
+                        p.OrderDetails
+                            .Select(od => od.Order.CustomerId) 
+                            .Distinct()
+                            .Count() == totalCustomers        
+                    )
+                    .Select(p => new
+                    {
+                        ProductID = p.ProductId,
+                        ProductName = p.ProductName
+                    })
+                    .ToList();
+
+                foreach( var item in list)
+                {
+                    Console.WriteLine($"ID : {item.ProductID,-4} ProductName : {item.ProductName}");
+                }
+
+            }
+        }
+
+        public void SupplierMoreThan5()
+        {
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Suppliers
+                        .Where(s => s.Products.Count() > 4) // for 5 empty
+                        .Select(s => new
+                        {
+                            SupplierID = s.SupplierId,
+                            SupplierName = s.CompanyName,
+                            ProductCount = s.Products.Count()
+                        })
+                        .ToList();
+
+                foreach( var item in list)
+                {
+                    Console.WriteLine(item.SupplierID + " " + item.SupplierName + " " + item.ProductCount);
+                }
+
+            }
+        }
+
+        public void CusSingleHighest()
+        {
+            using(var dbcontext =  new NorthWindContext())
+            {
+                var orderValues = dbcontext.Orders
+                        .Select(o => new
+                        {
+                            o.OrderId,
+                            o.CustomerId,
+                            o.Customer.CompanyName,
+                            OrderValue = o.OrderDetails
+                                .Sum(od => od.UnitPrice * od.Quantity * (1 - (decimal)od.Discount))
+                        });
+
+                var maxOrderValue = orderValues.Max(o => o.OrderValue);
+
+                var result = orderValues
+                    .Where(o => o.OrderValue == maxOrderValue)
+                    .ToList();
+
+                foreach(var  item in result)
+                {
+                    Console.WriteLine(item.CompanyName+" "+item.OrderId+" "+item.OrderValue);
+                }
+            }
         }
     }
 }
