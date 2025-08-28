@@ -865,7 +865,37 @@ namespace Excersice2_EFCoreNorthWind
 
         public void topEmpYear()
         {
-            
+            using (var database = new NorthWindContext())
+            {
+                try
+                {
+                    var employees = database.OrderDetails
+                        .Where(od => od.Order.OrderDate != null)
+                        .GroupBy(od => new
+                        {
+                            Year = od.Order.OrderDate.Value.Year,
+                            od.Order.Employee.FirstName,
+                            od.Order.Employee.LastName
+                        })
+                        .Select(g => new
+                        {
+                            g.Key.Year,
+                            EmployeeName = g.Key.FirstName + " " + g.Key.LastName,
+                            TotalSales = g.Sum(od => od.Quantity * od.UnitPrice * (decimal)(1 - od.Discount))
+                        })
+                        .GroupBy(x => x.Year)
+                        .Select(g => g.OrderByDescending(x => x.TotalSales).First());
+
+                    Console.WriteLine("{0,-10} {1,-30} {2,-15}", "Year", "EmployeeName", "TotalSales");
+                    Console.WriteLine();
+                    foreach (var item in employees)
+                    {
+                        Console.WriteLine("{0,-10} {1,-30} {2,-15:F2}", item.Year, item.EmployeeName, item.TotalSales);
+                    }
+                    Console.WriteLine();
+                }
+                catch (Exception e) { Console.WriteLine(e.Message); }
+            }
         }
 
         public void ProductWithallCus()
