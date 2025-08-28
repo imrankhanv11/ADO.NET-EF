@@ -36,7 +36,6 @@ namespace Excersice2_EFCoreNorthWind
                 Console.WriteLine("| 19.                            shipper, average delivery time                       |");
                 Console.WriteLine("| 20.                            orders that took more than 30 days to deliver        |");
                 Console.WriteLine("| 21.                            top shipper based on the number of orders shipped.   |");
-                // Not Completed
                 Console.WriteLine("| 22.                            top employee per year based on total sales           |");
                 Console.WriteLine("| 23.                            products that were ordered by every customer         |");
                 Console.WriteLine("| 24.                            suppliers who supply more than 5 products.           |");
