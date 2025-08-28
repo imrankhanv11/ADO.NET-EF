@@ -946,7 +946,49 @@ namespace Excersice2_EFCoreNorthWind
 
         public void CatOrderCus()
         {
-            
+            using(var dbcontext = new NorthWindContext())
+            {
+                Console.Write("Choose the Category : ");
+                var cat = dbcontext.Categories.ToList();
+
+            CHECK_catID:
+                foreach (var item in cat)
+                {
+                    Console.WriteLine(item.CategoryId + " : " + item.CategoryName);
+                }
+
+                Console.Write("Enter the Cat ID : ");
+                int categoryId = input.IntCheck(Console.ReadLine());
+
+                if(!dbcontext.Categories.Any(a=> a.CategoryId == categoryId))
+                {
+                    Console.WriteLine("Cat ID not Found try again");
+                    goto CHECK_catID;
+                }
+
+                var list = dbcontext.Customers
+                    .Where(c =>
+                        dbcontext.Products
+                            .Where(p => p.CategoryId == categoryId)
+                            .All(p => c.Orders
+                                .SelectMany(o => o.OrderDetails)
+                                .Any(od => od.ProductId == p.ProductId))
+                    )
+                    .Select(c => new
+                    {
+                        CustomerName = c.CompanyName,
+                        CategoryName = dbcontext.Categories
+                                        .Where(cat => cat.CategoryId == categoryId)
+                                        .Select(cat => cat.CategoryName)
+                                        .FirstOrDefault()
+                    })
+                    .ToList();
+
+                foreach (var item in list)
+                {
+                    Console.WriteLine($"Customer Name : {item.CustomerName,-20} {"--",-2} {item.CategoryName}");
+                }
+            }
         }
 
         public void MostProfitProduct()

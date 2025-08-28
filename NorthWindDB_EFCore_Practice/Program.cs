@@ -41,7 +41,6 @@ namespace Excersice2_EFCoreNorthWind
                 Console.WriteLine("| 23.                            products that were ordered by every customer         |");
                 Console.WriteLine("| 24.                            suppliers who supply more than 5 products.           |");
                 Console.WriteLine("| 25.                            customer(s) with the single highest order value      |");
-                // Not Completed
                 Console.WriteLine("| 26.                            customers who ordered all product in a given category|");
                 Console.WriteLine("| 27.                            Show the most profitable product                     |");
                 Console.WriteLine("|  0.                                        EXIT                                     |");
