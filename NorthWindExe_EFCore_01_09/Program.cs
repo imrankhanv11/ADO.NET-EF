@@ -10,9 +10,9 @@ namespace EXC_NorthWind_01_09_2025
             Operations one = new Operations();
             while (true)
             {
-                Console.WriteLine("*--------------------------------------------------------------------------------------*");
+                Console.WriteLine("+--------------------------------------------------------------------------------------+");
                 Console.WriteLine("|                                         #MENU                                        |");
-                Console.WriteLine("*--------------------------------------------------------------------------------------*");
+                Console.WriteLine("+--------+-----------------------------------------------------------------------------+");
                 Console.WriteLine("|  1.    |     employee’s full name along with all the territories                     |");
                 Console.WriteLine("|  2.    |      orders in the system that do not have any related OrderDetails.        |");
                 Console.WriteLine("|  3.    |     product category the highest total quantity ordered across all orders.  |");
@@ -22,7 +22,6 @@ namespace EXC_NorthWind_01_09_2025
                 Console.WriteLine("|  6.    |     all products that were never included in any order.                     |");
                 Console.WriteLine("|  7.    |     Rank employees by their total sales amount in 1998.                     |");
                 Console.WriteLine("|  8.    |     Generate a report of total sales per month for the year 1997 by mon     |");
-                // not complete
                 Console.WriteLine("|  9.    |     customer who had the longest gap between two consecutive orders.        |");
                 Console.WriteLine("| 10.    |     prds where the crnt stk units on order is less than the reorder level.  |");
                 // not complete
@@ -32,7 +31,7 @@ namespace EXC_NorthWind_01_09_2025
                 Console.WriteLine("| 14.    |     Insert a new order for an existing customer with at least 2 ord detisle |");
                 Console.WriteLine("|        |     making sure EF Core correctly saves both the order and its details.     |");
                 Console.WriteLine("|  0.    |     EXIT                                                                    |");
-                Console.WriteLine("*--------------------------------------------------------------------------------------*");
+                Console.WriteLine("+--------+-----------------------------------------------------------------------------+");
                 Console.WriteLine();
                 Console.Write("Enter the Code : ");
                 string Code = Console.ReadLine();

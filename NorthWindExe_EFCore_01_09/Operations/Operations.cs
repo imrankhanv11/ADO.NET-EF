@@ -26,7 +26,9 @@ namespace EXC_NorthWind_01_09_2025
 
                     foreach (var item in list)
                     {
+                        Console.WriteLine("---------------------------------------------");
                         Console.WriteLine(item.ID + " - " + item.Name);
+                        Console.WriteLine("---------------------------------------------");
                         foreach (var item2 in item.Territory)
                         {
                             Console.WriteLine(item2);
@@ -104,14 +106,21 @@ namespace EXC_NorthWind_01_09_2025
 
         public async Task CusAndTheirAvgOrders()
         {
-            using(var dbcontext = new NorthWindContext())
+            try
             {
-                //var list = dbcontext.Customers.Select(s=> new
-                //{
-                //    ID = s.CustomerId,
-                //    Name = s.CompanyName,
-                //    Avg = s.Orders.
-                //})
+                using (var dbcontext = new NorthWindContext())
+                {
+                    //var list = dbcontext.Customers.Select(s=> new
+                    //{
+                    //    ID = s.CustomerId,
+                    //    Name = s.CompanyName,
+                    //    Avg = s.Orders.
+                    //})
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -175,10 +184,9 @@ namespace EXC_NorthWind_01_09_2025
                             {
                                 EmployeeName = e.FirstName + " " + e.LastName,
                                 TotalSales = e.Orders
-                                .Where(o => o.OrderDate >= new DateTime(1998, 1, 1)
-                                         && o.OrderDate < new DateTime(1999, 1, 1))
+                                .Where(o => o.OrderDate.Value.Year == 1998)
                                     .SelectMany(o => o.OrderDetails)
-                                    .Sum(od => od.Quantity * od.UnitPrice * (1 - (decimal)od.Discount))
+                                    .Sum(od => (od.Quantity * od.UnitPrice) * (1 - (decimal)od.Discount))
                             })
                             .OrderByDescending(e => e.TotalSales)
                             .ToListAsync();
@@ -235,15 +243,40 @@ namespace EXC_NorthWind_01_09_2025
         {
             try
             {
-                //using( var dbcontext = new NorthWindContext())
-                //{
-                //    var list = dbcontext.Customers.Select(s=> new
-                //    {
-                //        ID= s.CustomerId,
-                //        Name = s.CompanyName,
+                using (var dbcontext = new NorthWindContext())
+                {
+                    var customers = dbcontext.Customers
+                            .Where(c => c.Orders.Count >= 2)
+                            .Include(c => c.Orders)
+                            .ToList();
 
-                //    })
-                //}
+                    string customerId = null;
+                    string companyName = null;
+                    double maxGapDays = 0;
+
+                    foreach (var customer in customers)
+                    {
+                        var sorted = customer.Orders
+                            .OrderBy(o => o.OrderDate.Value)
+                            .ToList();
+
+                        for (int i = 1; i < sorted.Count; i++)
+                        {
+                            double gap = (sorted[i].OrderDate.Value - sorted[i - 1].OrderDate.Value).TotalDays;
+                            if (gap > maxGapDays)
+                            {
+                                maxGapDays = gap;
+                                customerId = customer.CustomerId;
+                                companyName = customer.CompanyName;
+                            }
+                        }
+                    }
+
+                    if(customerId != null )
+                    {
+                        Console.WriteLine(customerId+" - "+companyName+" - "+maxGapDays);
+                    }
+                }
             }
             catch(Exception ex)
             {
@@ -299,12 +332,11 @@ namespace EXC_NorthWind_01_09_2025
                         .SelectMany(o => o.OrderDetails)
                         .ToList();
 
+                    
+
                     foreach (var order in orders)
                     {
-                        foreach (var detail in order.Order.OrderDetails)
-                        {
-                            detail.Discount = 0.1f;
-                        }
+                        order.Discount = 0.1f;
                     }
 
                     dbcontext.SaveChanges();
