@@ -229,5 +229,122 @@ namespace EXC_NorthWind_01_09_2025
                 Console.WriteLine(ex.Message);
             }
         }
+
+        public async Task CusLongGap()
+        {
+            try
+            {
+                //using( var dbcontext = new NorthWindContext())
+                //{
+                //    var list = dbcontext.Customers.Select(s=> new
+                //    {
+                //        ID= s.CustomerId,
+                //        Name = s.CompanyName,
+
+                //    })
+                //}
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public async Task CompareUnits()
+        {
+            try
+            {
+                using(var dbcontext = new NorthWindContext())
+                {
+                    var list = await dbcontext.Products.Where(s => s.UnitsInStock + s.UnitsOnOrder < s.ReorderLevel).ToListAsync();
+
+                    foreach (var item in list)
+                    {
+                        Console.WriteLine($"ID : {item.ProductId,-3} Name : {item.ProductName,-18} Unit In Stock : {item.UnitsInStock,-3} Unints on Orders : {item.UnitsOnOrder,-3} ReorderLevel : {item.ReorderLevel} ");
+                    }
+                }
+            }
+            catch( Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public async Task top3Products()
+        {
+            try
+            {
+                //using(var dbcontext = new NorthWindContext())
+                //{
+                //    var list = dbcontext.
+                //}
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public async Task discount()
+        {
+            try
+            {
+                using (var dbcontext = new NorthWindContext())
+                {
+                    var orders = dbcontext.Orders
+                        .Where(o => o.Customer.Country == "Germany"
+                                    && o.OrderDate.HasValue
+                                    && o.OrderDate.Value.Year == 1997)
+                        .SelectMany(o => o.OrderDetails)
+                        .ToList();
+
+                    foreach (var order in orders)
+                    {
+                        foreach (var detail in order.Order.OrderDetails)
+                        {
+                            detail.Discount = 0.1f;
+                        }
+                    }
+
+                    dbcontext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public async Task DeleteOrders()
+        {
+            try
+            {
+                using (var dbcontext = new NorthWindContext())
+                {
+                    var ordersToDelete = dbcontext.Orders
+                        .Where(o => o.ShippedDate == null)
+                        .ToList();
+
+                    foreach (var order in ordersToDelete)
+                    {
+                        var details = dbcontext.OrderDetails
+                            .Where(d => d.OrderId == order.OrderId)
+                            .ToList();
+
+                        dbcontext.OrderDetails.RemoveRange(details);
+                    }
+
+                    dbcontext.Orders.RemoveRange(ordersToDelete);
+
+                    dbcontext.SaveChanges();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 }

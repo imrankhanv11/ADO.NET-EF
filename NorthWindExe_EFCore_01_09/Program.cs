@@ -22,9 +22,12 @@ namespace EXC_NorthWind_01_09_2025
                 Console.WriteLine("|  6.    |     all products that were never included in any order.                     |");
                 Console.WriteLine("|  7.    |     Rank employees by their total sales amount in 1998.                     |");
                 Console.WriteLine("|  8.    |     Generate a report of total sales per month for the year 1997 by mon     |");
+                // not complete
                 Console.WriteLine("|  9.    |     customer who had the longest gap between two consecutive orders.        |");
                 Console.WriteLine("| 10.    |     prds where the crnt stk units on order is less than the reorder level.  |");
+                // not complete
                 Console.WriteLine("| 11.    |     list the top 3 other products most frequently ordered together with it. |");
+                // show error
                 Console.WriteLine("| 12.    |     10% discount to all orders placed by customers from Germany in 1997     |");
                 Console.WriteLine("| 13.    |     Delete all orders that were never shipped (ShippedDate IS NULL          |");
                 Console.WriteLine("| 14.    |     Insert a new order for an existing customer with at least 2 ord detisle |");
@@ -62,17 +65,21 @@ namespace EXC_NorthWind_01_09_2025
                         await one.Report1997Sale();
                         break;
                     case "9":
+                        await one.CusLongGap();
                         break;
                     case "10":
+                        await one.CompareUnits();
                         break;
                     case "11":
+                        await one.top3Products();
                         break;
                     case "12":
+                        await one.discount();
                         break;
                     case "13":
+                        await one.DeleteOrders();
                         break;
                     case "14":
-                        break;
                         break;
                     case "0":
                         Console.WriteLine("Thank You");
