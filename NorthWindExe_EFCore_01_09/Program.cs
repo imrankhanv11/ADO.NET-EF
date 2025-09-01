@@ -16,7 +16,7 @@ namespace EXC_NorthWind_01_09_2025
                 Console.WriteLine("|  1.    |     employee’s full name along with all the territories                     |");
                 Console.WriteLine("|  2.    |      orders in the system that do not have any related OrderDetails.        |");
                 Console.WriteLine("|  3.    |     product category the highest total quantity ordered across all orders.  |");
-                // not complete
+                // Check
                 Console.WriteLine("|  4.    |     customer, calculate the average number of days between their orders.    |");
                 Console.WriteLine("|  5.    |     all shippers with the total order value they handled                    |");
                 Console.WriteLine("|  6.    |     all products that were never included in any order.                     |");

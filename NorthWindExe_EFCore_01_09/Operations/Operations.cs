@@ -110,15 +110,34 @@ namespace EXC_NorthWind_01_09_2025
             {
                 using (var dbcontext = new NorthWindContext())
                 {
-                    //var list = dbcontext.Customers.Select(s=> new
-                    //{
-                    //    ID = s.CustomerId,
-                    //    Name = s.CompanyName,
-                    //    Avg = s.Orders.
-                    //})
+                    var customers = dbcontext.Customers
+                        .Where(c => c.Orders.Count > 1) 
+                        .ToList();
+
+                    foreach (var customer in customers)
+                    {
+                        var sortedOrders = customer.Orders
+                            .OrderBy(o => o.OrderDate.Value)
+                            .ToList();
+
+                        //if (sortedOrders.Count < 2)
+                        //    continue;
+
+                        double totalGap = 0;
+
+                        for (int i = 1; i < sortedOrders.Count; i++)
+                        {
+                            totalGap += (sortedOrders[i].OrderDate.Value - sortedOrders[i - 1].OrderDate.Value).TotalDays;
+                        }
+
+                        double avgGap = totalGap / (sortedOrders.Count - 1);
+
+                        Console.WriteLine($"{customer.CustomerId} | {customer.CompanyName} | {avgGap}");
+                    }
                 }
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
