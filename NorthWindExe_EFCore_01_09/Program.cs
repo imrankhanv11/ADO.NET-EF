@@ -16,6 +16,7 @@ namespace EXC_NorthWind_01_09_2025
                 Console.WriteLine("|  1.    |     employee’s full name along with all the territories                     |");
                 Console.WriteLine("|  2.    |      orders in the system that do not have any related OrderDetails.        |");
                 Console.WriteLine("|  3.    |     product category the highest total quantity ordered across all orders.  |");
+                // not complete
                 Console.WriteLine("|  4.    |     customer, calculate the average number of days between their orders.    |");
                 Console.WriteLine("|  5.    |     all shippers with the total order value they handled                    |");
                 Console.WriteLine("|  6.    |     all products that were never included in any order.                     |");
@@ -52,10 +53,13 @@ namespace EXC_NorthWind_01_09_2025
                         await one.ShippersWithTotalOrders();
                         break;
                     case "6":
+                        await one.ProductNotInOrders();
                         break;
                     case "7":
+                        await one.RankEmp1998();
                         break;
                     case "8":
+                        await one.Report1997Sale();
                         break;
                     case "9":
                         break;

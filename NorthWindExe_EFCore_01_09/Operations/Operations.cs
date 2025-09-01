@@ -142,5 +142,92 @@ namespace EXC_NorthWind_01_09_2025
                 Console.WriteLine(ex.Message);
             }
         }
+
+        public async Task ProductNotInOrders()
+        {
+            try
+            {
+                using(var dbcontext = new NorthWindContext())
+                {
+                    var list = await dbcontext.Products.Where(s => !s.OrderDetails.Any()).ToListAsync();
+
+                    foreach (var item in list)
+                    {
+                        Console.WriteLine($"{item.ProductId,-4} {item.ProductName, -20} {item.Category.CategoryName}");
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public async Task RankEmp1998()
+        {
+            try
+            {
+                using( var dbcontext = new NorthWindContext())
+                {
+                    var list = await dbcontext.Employees
+                            .Select(e => new
+                            {
+                                EmployeeName = e.FirstName + " " + e.LastName,
+                                TotalSales = e.Orders
+                                .Where(o => o.OrderDate >= new DateTime(1998, 1, 1)
+                                         && o.OrderDate < new DateTime(1999, 1, 1))
+                                    .SelectMany(o => o.OrderDetails)
+                                    .Sum(od => od.Quantity * od.UnitPrice * (1 - (decimal)od.Discount))
+                            })
+                            .OrderByDescending(e => e.TotalSales)
+                            .ToListAsync();
+
+                    int count = 1;
+
+                    foreach (var item in list)
+                    {
+                        Console.WriteLine($"Name : {item.EmployeeName,-17} TotalSale : {item.TotalSales, -5} Rank : {count++}");
+                    }
+                }
+            }
+            catch( Exception ex )
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public async Task Report1997Sale()
+        {
+            try
+            {
+                using(var  dbcontext = new NorthWindContext())
+                {
+                    var list = await dbcontext.Orders
+                            .Where(o => o.OrderDate.HasValue && o.OrderDate.Value.Year == 1997) 
+                            .SelectMany(o => o.OrderDetails.Select(od => new
+                            {
+                                Month = o.OrderDate.Value.Month,
+                                Sales = od.Quantity * od.UnitPrice * (1 - (decimal)od.Discount)
+                            }))
+                            .GroupBy(x => x.Month)
+                            .Select(g => new
+                            {
+                                Month = g.Key,
+                                TotalSales = g.Sum(x => x.Sales)
+                            })
+                            .OrderBy(x => x.Month)
+                            .ToListAsync();
+
+                    foreach (var item in list)
+                    {
+                        Console.WriteLine(item.Month+" : "+item.TotalSales);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 }
