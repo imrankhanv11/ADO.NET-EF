@@ -80,6 +80,7 @@ namespace EXC_NorthWind_01_09_2025
                         await one.DeleteOrders();
                         break;
                     case "14":
+                        one.InsertNewOrder();
                         break;
                     case "0":
                         Console.WriteLine("Thank You");

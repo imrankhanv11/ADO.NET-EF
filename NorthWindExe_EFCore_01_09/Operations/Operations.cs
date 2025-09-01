@@ -10,6 +10,7 @@ namespace EXC_NorthWind_01_09_2025
 {
     public class Operations
     {
+        InputValidations input = new InputValidations();
         public async Task EmpTerteroy()
         {
             try
@@ -345,6 +346,186 @@ namespace EXC_NorthWind_01_09_2025
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        public void InsertNewOrder()
+        {
+            List<OrderDetail> orderDetails = new List<OrderDetail>();
+            string check = "";
+            do
+            {
+                Console.WriteLine("Product List : ");
+                int ProductID;
+                decimal UnitPrize;
+                using (var dbcontext = new NorthWindContext())
+                {
+                    var Plist = dbcontext.Products.ToList();
+
+                CHECK_ProductID:
+                    foreach (var product in Plist)
+                    {
+                        Console.WriteLine(product.ProductId + " : " + product.ProductName);
+                    }
+
+                    Console.Write("Enter the Product ID : ");
+                    ProductID = input.IntCheck(Console.ReadLine());
+
+                    if (!dbcontext.Products.Any(s => s.ProductId == ProductID))
+                    {
+                        Console.WriteLine("Product Id Not found, try again");
+                        goto CHECK_ProductID;
+                    }
+
+                    var product2 = dbcontext.Products.Find(ProductID);
+
+
+                    UnitPrize = (decimal)product2.UnitPrice;
+
+                }
+
+                Console.Write("Enter the Quantity : ");
+                int Quantity = input.IntCheck(Console.ReadLine());
+
+                var list = new OrderDetail
+                {
+                    ProductId = ProductID,
+                    Quantity = (short)Quantity,
+                    UnitPrice = UnitPrize,
+                    Discount = 0
+                };
+
+                orderDetails.Add(list);
+
+                Console.Write("Do you want add another product (yes/no) : ");
+                check = Console.ReadLine().ToLower().Trim();
+            } while (check == "yes");
+
+            
+        RECHECK_customerID:
+            Console.Write("Enter the Customer ID : ");
+            string CustomerID = input.CustomerIDCheck(Console.ReadLine());
+
+            using (var dbcontext = new NorthWindContext())
+            {
+                if (!dbcontext.Customers.Any(a => a.CustomerId == CustomerID))
+                {
+                    Console.WriteLine("CustomerID not found");
+                    goto RECHECK_customerID;
+                }
+            }
+
+                Console.WriteLine("Employee List : ");
+            int EmployeeID;
+            using (var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Employees.Select(s => new
+                {
+                    ID = s.EmployeeId,
+                    Name = s.FirstName + " " + s.LastName
+                }).ToList();
+
+            RECHECK_empID:
+                foreach (var item in list)
+                {
+                    Console.WriteLine(item.ID + " : " + item.Name);
+                }
+
+                Console.Write("Enter the Employee ID : ");
+                EmployeeID = input.IntCheck(Console.ReadLine());
+
+                if(!dbcontext.Employees.Any(s=> s.EmployeeId == EmployeeID))
+                {
+                    Console.WriteLine("Employee ID not Found");
+                    goto RECHECK_empID;
+                }
+            }
+
+            DateTime OrderDate = DateTime.Now;
+            DateTime RequidDate = DateTime.Now; 
+            DateTime ShippedDate = DateTime.Now.AddDays(3);
+
+            int ShipID;
+            using(var dbcontext = new NorthWindContext())
+            {
+                var list = dbcontext.Shippers.ToList();
+
+            RECHECK_shipID:
+                foreach (var item in list)
+                {
+                    Console.WriteLine(item.ShipperId + " : " + item.CompanyName);
+                }
+
+                Console.Write("Enter the Shipper ID : ");
+                ShipID = input.IntCheck(Console.ReadLine());
+
+                if(!dbcontext.Shippers.Any(a=> a.ShipperId == ShipID))
+                {
+                    Console.WriteLine("ShipperID not Found : ");
+                    goto RECHECK_shipID;
+                }
+            }
+
+            Console.Write("Enter the Fright : ");
+            decimal Fright = input.DecimalCheck(Console.ReadLine());
+
+            Console.Write("Enter the Ship Name : ");
+            string ShipName = input.ShipNameCheck(Console.ReadLine());
+
+            Console.Write("Enter the Address : ");
+            string Address = input.AddressCheck(Console.ReadLine());
+
+            Console.Write("Enter the Ship City : ");
+            string ShipCity = input.CityCheck(Console.ReadLine());
+
+            Console.Write("Enter the Ship County : ");
+            string ShipCountry = input.CountryCheck(Console.ReadLine());
+
+            var OrderMain = new Order
+            {
+                CustomerId = CustomerID,
+                EmployeeId = EmployeeID,
+                OrderDate = OrderDate,
+                RequiredDate = RequidDate,
+                ShippedDate = ShippedDate,
+                ShipVia = ShipID,
+                Freight = Fright,
+                ShipAddress = Address,
+                ShipName = ShipName,
+                ShipCity = ShipCity,
+                ShipCountry = ShipCountry
+            };
+
+            
+            using (var dbcontext = new NorthWindContext())
+            {
+                dbcontext.Orders.Add(OrderMain);
+                dbcontext.SaveChanges();
+
+                int OrderID = OrderMain.OrderId;
+         
+                List<OrderDetail> orderDetailsnewone = new List<OrderDetail>();
+
+                foreach (var item in orderDetails)
+                {
+                    var list = new OrderDetail
+                    {
+                        OrderId = OrderID,
+                        ProductId = item.ProductId,
+                        UnitPrice = item.UnitPrice,
+                        Quantity = item.Quantity,
+                        Discount = item.Discount
+                    };
+
+                    orderDetailsnewone.Add(list);
+                }
+
+                dbcontext.OrderDetails.AddRange(orderDetailsnewone);
+                dbcontext.SaveChanges();
+                Console.WriteLine($"Order Placed successfully- your Order id is {OrderID}");
+                Console.WriteLine();
+            }
+
+
         }
     }
 }
