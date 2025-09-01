@@ -27,7 +27,6 @@ namespace EXC_NorthWind_01_09_2025
                 Console.WriteLine("| 10.    |     prds where the crnt stk units on order is less than the reorder level.  |");
                 // not complete
                 Console.WriteLine("| 11.    |     list the top 3 other products most frequently ordered together with it. |");
-                // show error
                 Console.WriteLine("| 12.    |     10% discount to all orders placed by customers from Germany in 1997     |");
                 Console.WriteLine("| 13.    |     Delete all orders that were never shipped (ShippedDate IS NULL          |");
                 Console.WriteLine("| 14.    |     Insert a new order for an existing customer with at least 2 ord detisle |");
