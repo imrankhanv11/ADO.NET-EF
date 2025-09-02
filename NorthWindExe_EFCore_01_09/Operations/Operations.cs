@@ -110,9 +110,9 @@ namespace EXC_NorthWind_01_09_2025
             {
                 using (var dbcontext = new NorthWindContext())
                 {
-                    var customers = dbcontext.Customers
+                    var customers = await dbcontext.Customers
                         .Where(c => c.Orders.Count > 1) 
-                        .ToList();
+                        .ToListAsync();
 
                     foreach (var customer in customers)
                     {
@@ -264,10 +264,10 @@ namespace EXC_NorthWind_01_09_2025
             {
                 using (var dbcontext = new NorthWindContext())
                 {
-                    var customers = dbcontext.Customers
+                    var customers = await dbcontext.Customers
                             .Where(c => c.Orders.Count >= 2)
                             .Include(c => c.Orders)
-                            .ToList();
+                            .ToListAsync();
 
                     string customerId = null;
                     string companyName = null;
@@ -344,12 +344,12 @@ namespace EXC_NorthWind_01_09_2025
             {
                 using (var dbcontext = new NorthWindContext())
                 {
-                    var orders = dbcontext.Orders
+                    var orders = await dbcontext.Orders
                         .Where(o => o.Customer.Country == "Germany"
                                     && o.OrderDate.HasValue
                                     && o.OrderDate.Value.Year == 1997)
                         .SelectMany(o => o.OrderDetails)
-                        .ToList();
+                        .ToListAsync();
 
                     
 
@@ -373,9 +373,9 @@ namespace EXC_NorthWind_01_09_2025
             {
                 using (var dbcontext = new NorthWindContext())
                 {
-                    var ordersToDelete = dbcontext.Orders
+                    var ordersToDelete = await dbcontext.Orders
                         .Where(o => o.ShippedDate == null)
-                        .ToList();
+                        .ToListAsync();
 
                     foreach (var order in ordersToDelete)
                     {

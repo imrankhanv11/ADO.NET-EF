@@ -47,7 +47,6 @@ namespace EXC_NorthWind_01_09_2025
             return input;
         }
 
-
         public string ShipNameCheck(string input)
         {
             while (true)
@@ -197,7 +196,6 @@ namespace EXC_NorthWind_01_09_2025
             }
             return value;
         }
-
         
         public string AddressCheck(string input)
         {
@@ -224,7 +222,6 @@ namespace EXC_NorthWind_01_09_2025
             }
             return input;
         }
-
-        
+   
     }
 }
